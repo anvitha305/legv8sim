@@ -16,7 +16,5 @@ struct Instruction{
 	typ: Typ,
 	op: char,
     regs: Vec<String>,
-    addr: BitVec
-
-    
+    addr: BitVec    
 }
