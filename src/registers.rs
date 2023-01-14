@@ -3,4 +3,3 @@ struct Reg{
     name: String
 
 }
-//:3
