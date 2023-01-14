@@ -4,6 +4,7 @@ use bitvec::prelude::*;
 use std::fs::File;
 use std::io::prelude::*;
 mod legv8;
+mod registers;
 
 pub fn main() -> iced::Result {
     Simulator::run(Settings::default())
@@ -16,11 +17,7 @@ fn readfile(fname: &str) -> std::io::Result<String>{
     Ok(code)
 }
 
-struct Reg{
-    val: f32,
-    name: String
 
-}
 struct Simulator{
    registers: Vec<Reg>,
    main_mem: Vec<f32>,
