@@ -1,5 +1,5 @@
 use iced::widget::scrollable::{Properties, Scrollbar, Scroller};
-use iced::widget::{button, column, row, text, text_input, scrollable};
+use iced::widget::{button, container, column, row, text, text_input, scrollable};
 use iced::{Alignment, Element, Length, Sandbox, Settings};
 use std::fs::File;
 use std::io::prelude::*;
@@ -62,7 +62,7 @@ impl Sandbox for Simulator{
                     Err(_err) => "Error reading your file.".to_string()
                 };
                 let v: Vec<&str> = self.st.split('.').collect();
-                if v[1].ne("asm"){
+                if v.len() != 2 || v[1].ne("asm"){
                     self.code = "Please use a .asm file to simulate.".to_string();
                 }
             }
@@ -71,16 +71,14 @@ impl Sandbox for Simulator{
     }
 
     fn view(&self) -> Element<Message> {
-        let content: Element<_> = column![
+        let content: Element<_> = container(
+            row![text(&self.code)].align_items(Alignment::Start).padding(30))
+            .width(Length::Fill)
+        .into();
+        Element::from(column![column![
             row![text("File viewer").size(30)].align_items(Alignment::Center), 
             row![text("Name of file to be simulated:").size(20)].align_items(Alignment::Center),
             row![text_input(&String::new(), &self.st, Message::Input), 
-            button("Ok").on_press(Message::FileOpen),].align_items(Alignment::Center),
-            row![text(&self.code)].align_items(Alignment::Start).padding(30)]
-        .padding(20)
-        .into();
-        scrollable(content).height(Length::Fill).into()
-        //;column!["hiii"].padding(20).into()
-        
+            button("Ok").on_press(Message::FileOpen),].align_items(Alignment::Center)].padding(30),container(scrollable(content)).height(Length::FillPortion(3)), row![text("hiii").size(100), text("hiii 2").size(100)]])
     }
 }
