@@ -68,11 +68,11 @@ impl Sandbox for Simulator{
 
     fn view(&self) -> Element<Message> {
         let content: Element<_> = column![
-            row![text("Name of file to be simulated:").size(30)].align_items(Alignment::Center),
+            row![text("File viewer").size(30)].align_items(Alignment::Center), 
+            row![text("Name of file to be simulated:").size(20)].align_items(Alignment::Center),
             row![text_input(&String::new(), &self.st, Message::Input), 
             button("Ok").on_press(Message::FileOpen),].align_items(Alignment::Center),
-            row![text(&self.code)].align_items(Alignment::Start).padding(50)
-        ]
+            row![text(&self.code)].align_items(Alignment::Start).padding(30)]
         .padding(20)
         .into();
         scrollable(content).height(Length::Fill).into()
