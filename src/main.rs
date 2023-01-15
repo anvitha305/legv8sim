@@ -1,6 +1,6 @@
-use iced::widget::{button, column, row, text, text_input,};
-use iced::{Alignment, Element, Sandbox, Settings};
-use bitvec::prelude::*;
+use iced::widget::scrollable::{Properties, Scrollbar, Scroller};
+use iced::widget::{button, column, row, text, text_input, scrollable};
+use iced::{Alignment, Element, Length, Sandbox, Settings};
 use std::fs::File;
 use std::io::prelude::*;
 mod legv8;
@@ -11,7 +11,7 @@ pub fn main() -> iced::Result {
 }
 
 fn readfile(fname: &str) -> std::io::Result<String>{
-    let mut file = File::open(fname)?;
+    let mut file = File::open(fname.to_string().trim())?;
     let mut code = String::new();
     file.read_to_string(&mut code)?;
     Ok(code)
@@ -19,7 +19,7 @@ fn readfile(fname: &str) -> std::io::Result<String>{
 
 
 struct Simulator{
-   registers: Vec<Reg>,
+   registers: Vec<registers::Reg>,
    main_mem: Vec<f32>,
    value: u32,
    st: String,
@@ -37,7 +37,7 @@ impl Sandbox for Simulator{
     fn new() -> Self {
         let mut a = Vec::new();
         for i in 0..32 {
-            a.push(Reg{val: 0.0, name: format!("x{}", i)})
+            a.push(registers::Reg{val: 0.0, name: format!("x{}", i)})
         }
         Self { registers: a, main_mem:Vec::new(), value:32, 
         st:"".to_string(), code:"".to_string()}
@@ -59,7 +59,7 @@ impl Sandbox for Simulator{
                 let result = readfile(&self.st);
                 self.code = match result {
                     Ok(val) => val,
-                    Err(err) => panic!("Error with reading your file.")
+                    Err(_err) => "Error reading your file.".to_string()
                 }
             }
 
@@ -67,14 +67,16 @@ impl Sandbox for Simulator{
     }
 
     fn view(&self) -> Element<Message> {
-        column![
+        let content: Element<_> = column![
             row![text("Name of file to be simulated:").size(30)].align_items(Alignment::Center),
             row![text_input(&String::new(), &self.st, Message::Input), 
             button("Ok").on_press(Message::FileOpen),].align_items(Alignment::Center),
             row![text(&self.code)].align_items(Alignment::Start).padding(50)
         ]
         .padding(20)
-        .into()
+        .into();
+        scrollable(content).height(Length::Fill).into()
+        //;column!["hiii"].padding(20).into()
         
     }
 }
