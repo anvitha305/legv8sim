@@ -60,6 +60,11 @@ impl Sandbox for Simulator{
                 self.code = match result {
                     Ok(val) => val,
                     Err(_err) => "Error reading your file.".to_string()
+                };
+                let v: Vec<&str> = self.st.split('.').collect();
+                if v[1].ne(".asm"){
+                    print!(v);
+                    self.code = "Please use a .asm file to simulate.".to_string();
                 }
             }
 
