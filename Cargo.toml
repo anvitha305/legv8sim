@@ -7,6 +7,6 @@ edition = "2021"
 
 [dependencies]
 iced = { version = "0.7", features = ["glow", "tokio"] }
+iced_native = "0.8"
 bitfield = "0.14.0"
 bitvec = "1"
-once_cell = "1.16.0"

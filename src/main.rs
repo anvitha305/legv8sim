@@ -1,11 +1,12 @@
-use iced::widget::scrollable::{Properties, Scrollbar, Scroller};
+#![windows_subsystem = "windows"] 
 use iced::widget::{button, container, column, row, text, text_input, scrollable};
 use iced::{Alignment, Element, Length, Sandbox, Settings};
 use std::fs::File;
 use std::io::prelude::*;
 mod legv8;
 mod registers;
-
+use registers::registers as regs;
+use crate::regs::registers;
 pub fn main() -> iced::Result {
     Simulator::run(Settings::default())
 }
@@ -19,7 +20,7 @@ fn readfile(fname: &str) -> std::io::Result<String>{
 
 
 struct Simulator{
-   registers: Vec<registers::Reg>,
+   regs: Vec<registers::Reg>,
    main_mem: Vec<f32>,
    value: u32,
    st: String,
@@ -39,7 +40,7 @@ impl Sandbox for Simulator{
         for i in 0..32 {
             a.push(registers::Reg{val: 0.0, name: format!("x{}", i)})
         }
-        Self { registers: a, main_mem:Vec::new(), value:32, 
+        Self { regs: a, main_mem:Vec::new(), value:32, 
         st:"".to_string(), code:"".to_string()}
         
     }
@@ -79,6 +80,6 @@ impl Sandbox for Simulator{
             row![text("File viewer").size(30)].align_items(Alignment::Center), 
             row![text("Name of file to be simulated:").size(20)].align_items(Alignment::Center),
             row![text_input(&String::new(), &self.st, Message::Input), 
-            button("Ok").on_press(Message::FileOpen),].align_items(Alignment::Center)].padding(30),container(scrollable(content)).height(Length::FillPortion(3)), row![text("hiii").size(100), text("hiii 2").size(100)]])
+            button("Ok").on_press(Message::FileOpen),].align_items(Alignment::Center)].padding(30),container(scrollable(content)).height(Length::FillPortion(3)), row![registers(self.regs.clone(), 500.0, 300.0), text("hiii 2").size(100)]].padding(20))
     }
 }

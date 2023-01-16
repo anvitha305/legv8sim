@@ -1,4 +1,3 @@
-use bitfield::bitfield;
 use bitvec::prelude::*;
 
 // Type of instruction being used.
