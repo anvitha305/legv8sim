@@ -1,0 +1,16 @@
+%YAML 1.2
+---
+name: LEG-V8
+file_extensions: [asm]
+scope: source.asm
+variables:
+  bname: '[A-Za-z_][A-Za-z_0-9]*'
+contexts:
+  block: 
+  numbers: 
+    - match: '\b(-)?[0-9.]+\b'
+      scope: constant.numeric.asm
+  rtype:
+    - match: '\b(add|addi|sub|subi|)\b'
+  etype:
+    - match:

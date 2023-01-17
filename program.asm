@@ -1,4 +1,3 @@
-
 .globl isPrimeAssembly
 isPrimeAssembly:
 //your code for iterating through arrays here
