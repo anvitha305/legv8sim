@@ -62,7 +62,7 @@ pub mod registers {
                 renderer::Quad {
                     bounds: layout.bounds(),
                     border_width: 0.0,
-                    border_radius: 40.0.into(),
+                    border_radius: 0.0.into(),
                     border_color: Color::TRANSPARENT,
                 },
                 Color::BLACK,
