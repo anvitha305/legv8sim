@@ -9,10 +9,9 @@ STUR X20, [SP,#8] // save X20 on stack
 STUR X19, [SP,#0] // save X19 on stack
 MOV X21, X0 // copy parameter X0 into X21
 MOV X22, X1 // copy parameter X1 into X22
-MOV X19, XZR
-X19, X1 // i = 0
+MOV X19, XZR // i = 0
 for1tst:
-CMP // compare X19 to X1 (i to n)
+CMP X19, X1 // compare X19 to X1 (i to n)
 B.GE exit1 // go to exit1 if X19 ≥ X1 (i≥n)
 SUBI X20, X19, #1 // j = i – 1
 for2tst:
