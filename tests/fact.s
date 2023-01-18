@@ -1,4 +1,5 @@
 .globl fact
+// computes factorial of a numver stored in x0
 fact:
 	SUBS	XZR, X0, #1
 	B.GT	else
