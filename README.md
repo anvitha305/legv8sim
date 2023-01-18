@@ -3,7 +3,7 @@
 ## Version 1.0 Sublime Highlighting
 Not really a version of the simulator, but rather Sublime editor's highlighting syntax defined so that I can use a particular parsing library that got put into a package. Future verison(s) will include support for more code editors to have LEG-V8 syntax highlighting.
 
-<img width="488" alt="leg-v8-sublime" src="https://user-images.githubusercontent.com/44482134/213085538-1d324ece-04c7-4ec8-af35-4d1d1d33faa3.png">
+<img width="491" alt="legv8 syntax highlighting in sublime" src="https://user-images.githubusercontent.com/44482134/213086258-32fa6c3a-bd7b-419b-a254-2064baf17c8c.png">
 
 \[demo of version 1.0's syntax highlighting]
 
