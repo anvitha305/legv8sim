@@ -1,5 +1,5 @@
 .globl fact
-// computes factorial of a numver stored in x0
+// computes factorial of a number stored in x0, example in DS-5 
 fact:
 	SUBS	XZR, X0, #1
 	B.GT	else

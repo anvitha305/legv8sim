@@ -1,3 +1,5 @@
+
+// sorts an array, Patterson and Hennessy ARM edition ch 2
 sort: 
 SUBI SP,SP,#40 // make room on stack for 5 registers
 STUR X30,[SP,#32] // save LR on stack
