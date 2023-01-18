@@ -1,0 +1,25 @@
+{
+  "name": "legv8",
+  "displayName": "LEG-V8 Syntax Highlighting",
+  "description": "Syntax highlighting for LEG-V8 assembly.",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [{
+      "id": "legv8",
+      "aliases": ["LEG-V8", "legv8"],
+      "extensions": [".s",".asm",".legv8"],
+      "configuration": "./language-configuration.json"
+    }],
+    "grammars": [{
+      "language": "legv8",
+      "scopeName": "source.legv8",
+      "path": "./syntaxes/legv8.tmLanguage.json"
+    }]
+  }
+}
