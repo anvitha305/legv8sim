@@ -13,7 +13,7 @@
     "languages": [{
       "id": "legv8",
       "aliases": ["LEG-V8", "legv8"],
-      "extensions": [".s",".asm",".legv8"],
+      "extensions": [".s"],
       "configuration": "./language-configuration.json"
     }],
     "grammars": [{
