@@ -7,8 +7,8 @@ STUR X22,[SP,#24] // save X22 on stack
 STUR X21,[SP,#16] // save X21 on stack
 STUR X20, [SP,#8] // save X20 on stack
 STUR X19, [SP,#0] // save X19 on stack
-MOV X21, X0 # copy parameter X0 into X21
-MOV X22, X1 # copy parameter X1 into X22
+MOV X21, X0 // copy parameter X0 into X21
+MOV X22, X1 // copy parameter X1 into X22
 MOV X19, XZR
 X19, X1 // i = 0
 for1tst:
