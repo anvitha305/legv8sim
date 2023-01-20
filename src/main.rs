@@ -46,7 +46,7 @@ impl Sandbox for Simulator{
     }
      
     fn title(&self) -> String {
-        String::from("LEGV8 Simulator ")
+        String::from("LEGV8 Simulator")
     }
 
     fn update(&mut self, message: Message) {
