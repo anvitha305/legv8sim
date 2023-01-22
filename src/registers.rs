@@ -9,8 +9,8 @@ pub struct Reg{
 pub mod registers {
     use crate::registers::Reg;
     use crate::Message;
-    use iced::widget::{Row, column, row, text, text_input, scrollable};
-    use iced::{Alignment, Element, Length, Settings};
+    use iced::widget::{Row, column, row, text};
+    use iced::{Element};c
     pub fn registers<'a>(regs: Vec<Reg>) -> Element<'a, Message> {
         let mut r1 = Vec::<Element<Message>>::new();
         let mut r2 = Vec::<Element<Message>>::new();
