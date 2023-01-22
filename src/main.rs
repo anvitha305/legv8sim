@@ -3,8 +3,7 @@ use iced::widget::{button, container, column, row, text, text_input, scrollable}
 use iced::{Alignment, Element, Length, Sandbox, Settings};
 use std::fs::File;
 use std::io::prelude::*;
-use iced::executor;
-use iced::theme::{self, Theme};
+use iced::theme::{Theme};
 mod legv8;
 mod registers;
 use registers::registers as regs;
@@ -30,7 +29,7 @@ struct Simulator{
 }
 
 #[derive(Debug, Clone)]
-enum Message {
+pub enum Message {
     Input(String),
     FileOpen,
     ThemeChange
@@ -67,6 +66,7 @@ impl Sandbox for Simulator{
                 if v.len() != 2 || v[1].ne("s"){
                     self.code = "Please use a .s assembly file to simulate.".to_string();
                 }
+                self.regs[0].val += 10.5;
             }
             Message::ThemeChange => {
                 self.darkmode = !self.darkmode;
@@ -81,10 +81,11 @@ impl Sandbox for Simulator{
             .width(Length::Fill)
         .into();
         Element::from(column![column![
-            row![text("File viewer  ").size(30),button("Toggle Theme").on_press(Message::ThemeChange)].align_items(Alignment::Center), 
+            row![text("File viewer").size(30),button("Toggle Theme").on_press(Message::ThemeChange)].spacing(10).align_items(Alignment::Center), 
             row![text("Name of file to be simulated:").size(20)].align_items(Alignment::Center),
             row![text_input(&String::new(), &self.st, Message::Input), 
-            button("Ok").on_press(Message::FileOpen)].align_items(Alignment::Center)].padding(30),container(scrollable(content)).height(Length::FillPortion(3)), row![registers(self.regs.clone(), 500.0, 300.0), text("hiii 2").size(100)]].padding(20))
+            button("Ok").on_press(Message::FileOpen)].align_items(Alignment::Center)].padding(30),container(scrollable(content)).height(Length::FillPortion(3)), 
+            row![registers(self.regs.clone()), text("memory placeholder lol")]].height(Length::FillPortion(3)).width(Length::Fill).padding(20))
     }
     fn theme(&self) -> Theme {
         if self.darkmode {

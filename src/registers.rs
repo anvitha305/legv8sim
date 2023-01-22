@@ -8,74 +8,28 @@ pub struct Reg{
 
 pub mod registers {
     use crate::registers::Reg;
-    use iced_native::layout::{self, Layout};
-    use iced_native::renderer;
-    use iced_native::widget::{self, Widget};
-    use iced_native::{Color, Element, Length, Point, Rectangle, Size};
-
-    pub struct Registers {
-        regs: Vec<Reg>,
-        width: f32,
-        height: f32,
-    }
-    impl Registers {
-        pub fn new(reg: Vec<Reg>, w:f32, h:f32) -> Self {
-            Self { regs:reg, width:w, height:h}
+    use crate::Message;
+    use iced::widget::{Row, column, row, text, text_input, scrollable};
+    use iced::{Alignment, Element, Length, Settings};
+    pub fn registers<'a>(regs: Vec<Reg>) -> Element<'a, Message> {
+        let mut r1 = Vec::<Element<Message>>::new();
+        let mut r2 = Vec::<Element<Message>>::new();
+        let mut r3 = Vec::<Element<Message>>::new();
+        let mut r4 = Vec::<Element<Message>>::new();
+        for reg in &regs[0..(regs.len()/4)] {
+            r1.push(column![row![text(reg.name.clone()+ ": "), text(reg.val)]].spacing(30).padding(10).into());
         }
-    }
-
-    pub fn registers(reg: Vec<Reg>, w:f32, h:f32) -> Registers {
-        Registers::new(reg, w, h)
-    }
-
-    impl<Message, Renderer> Widget<Message, Renderer> for Registers
-    where
-        Renderer: renderer::Renderer,
-    {
-        fn width(&self) -> Length {
-            Length::Shrink
+        for reg in &regs[(regs.len()/4)..(regs.len()/2)] {
+            r2.push(column![row![text(reg.name.clone()+ ": "), text(reg.val)]].spacing(30).padding(10).into());
         }
-
-        fn height(&self) -> Length {
-            Length::Shrink
+        for reg in &regs[(regs.len()/2)..(3*regs.len()/4)] {
+            r3.push(column![row![text(reg.name.clone()+ ": "), text(reg.val)]].spacing(30).padding(10).into());
         }
-
-        fn layout(
-            &self,
-            _renderer: &Renderer,
-            _limits: &layout::Limits,
-        ) -> layout::Node {
-            layout::Node::new(Size::new(self.width, self.height))
+        for reg in &regs[(3*regs.len()/4)..(regs.len())] {
+            r4.push(column![row![text(reg.name.clone()+ ": "), text(reg.val)]].spacing(30).padding(10).into());
         }
-
-        fn draw(
-            &self,
-            _state: &widget::Tree,
-            renderer: &mut Renderer,
-            _theme: &Renderer::Theme,
-            _style: &renderer::Style,
-            layout: Layout<'_>,
-            _cursor_position: Point,
-            _viewport: &Rectangle,
-        ) {
-            renderer.fill_quad(
-                renderer::Quad {
-                    bounds: layout.bounds(),
-                    border_width: 0.0,
-                    border_radius: 0.0.into(),
-                    border_color: Color::TRANSPARENT,
-                },
-                Color::BLACK,
-            );
-        }
-    }
-
-    impl<'a, Message, Renderer> From<Registers> for Element<'a, Message, Renderer>
-    where
-        Renderer: renderer::Renderer,
-    {
-        fn from(registers: Registers) -> Self {
-            Self::new(registers)
-        }
+        column![Row::with_children(r1), Row::with_children(r2), 
+        Row::with_children(r3), Row::with_children(r4)].into()
+        
     }
 }
