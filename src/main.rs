@@ -38,7 +38,7 @@ fn parse(code: &str){
     let ss = SyntaxSet::load_from_folder("src/syntax/legv8.sublime-syntax").unwrap();
     let ts = ThemeSet::load_defaults();
     let syntax = ss.find_syntax_by_extension("s").unwrap_or_else(||ss.find_syntax_plain_text());
-    let mut h = HighlightLines::new(syntax, &ts.themes["base16-mocha.dark"]);
+    let mut h = HighlightLines::new(syntax, &ts.themes["Solarized (light)"]);
     for line in LinesWithEndings::from(code) {
         let ranges: Vec<(Style, &str)> = h.highlight_line(line, &ss).unwrap();
         let escaped = as_24_bit_terminal_escaped(&ranges[..], true);

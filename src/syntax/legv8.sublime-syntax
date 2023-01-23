@@ -7,8 +7,7 @@ variables:
   bname: '[A-Za-z_][A-Za-z_0-9]*'
   ops: '(add|sub|mul|div)'
   log: '(and|orr|eor)'
-  cond: '(?i)l(e|t|s|o)|g(e|t)|h(i|s)|v(c|s)|c(s|c)
-    |eq|ne|hs|mi|pl|al'
+  cond: '(?i)l(e|t|s|o)|g(e|t)|h(i|s)|v(c|s)|c(s|c)|eq|ne|hs|mi|pl|al'
 contexts:
   main:
     # comments in LEGV8
@@ -31,18 +30,17 @@ contexts:
     # instructions:
 
     # i-type instructions [complete set]
-    - match: '\b(add|sub)i(s)?|andis|{{log}}i?|cmpi|ldi\b'
+    - match: '\b(?i)((add|sub)i(s)?|andis|{{log}}i?|cmpi|ldi)\b'
       scope: keyword.operator.word.asm
     # im-type instructions
-    - match: '\bmov(k|z)?\b'
+    - match: '\b(?i)(mov(k|z)?)\b'
       scope: keyword.operator.assignment.asm
     # d-type instructions [complete set]
-    - match: '\b(ldur)(b|h|sw)?|(ld|st)(xr|a)
-      |(stur)(b|h|w)?\b'
+    - match: '\b(?i)((ldur)(b|h|sw)?|(ld|st)(xr|a)
+      |(stur)(b|h|w)?)\b'
       scope: keyword.operator.assignment.asm
     # r-type instructions [complete set]
-    - match: '\b(?i)(ands|(f({{ops}}|cmp))(s|d)|(?i){{ops}}(s)?|{{log}}|
-      |br|ls(l|r)|(s|u)(div|mulh)|(ldur|stur)(s|d)|cmp)\b'
+    - match: \b(?i)(ands|(f({{ops}}|cmp))(s|d)|(?i){{ops}}(s)?|{{log}})|(br|ls(l|r)|(s|u)(div|mulh)|(ldur|stur)(s|d)|cmp)\b
       scope: keyword.operator.word.asm
     # cb-type instructions [complete set]
     - match: '\b(cb(n)?z|b\.{{cond}})\b'
