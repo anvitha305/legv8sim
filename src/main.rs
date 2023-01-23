@@ -1,6 +1,6 @@
 #![windows_subsystem = "windows"] 
 use iced::widget::{button, container, column, row, text, text_input, scrollable};
-use iced::{Alignment, Element, Length, Sandbox, Settings};
+use iced::{Alignment, Element, Font, Color, Length, Sandbox, Settings};
 use std::fs::File;
 use std::io::prelude::*;
 use iced::theme::{Theme};
@@ -40,7 +40,7 @@ impl Sandbox for Simulator{
     fn new() -> Self {
         let mut a = Vec::new();
         for i in 0..32 {
-            a.push(registers::Reg{val: 0.0, name: format!("x{}", i)})
+            a.push(registers::Reg{val: 0.0, name: format!("X{}", i)})
         }
         Self { regs: a, main_mem:Vec::new(), darkmode:true,
         st:"".to_string(), code:"".to_string()}
@@ -76,12 +76,15 @@ impl Sandbox for Simulator{
     }
 
     fn view(&self) -> Element<Message> {
+        const BOLD_FONT: Font = Font::External { 
+            name: "bold font",
+            bytes: include_bytes!("resources/Lato-Black.ttf")};
         let content: Element<_> = container(
             row![text(&self.code)].align_items(Alignment::Start).padding(30))
             .width(Length::Fill)
         .into();
         Element::from(column![column![
-            row![text("File viewer").size(30),button("Toggle Theme").on_press(Message::ThemeChange)].spacing(10).align_items(Alignment::Center), 
+            row![text("File viewer").font(BOLD_FONT).size(30),button("Toggle Theme").on_press(Message::ThemeChange)].spacing(10).align_items(Alignment::Center), 
             row![text("Name of file to be simulated:").size(20)].align_items(Alignment::Center),
             row![text_input(&String::new(), &self.st, Message::Input), 
             button("Ok").on_press(Message::FileOpen)].align_items(Alignment::Center)].padding(30),container(scrollable(content)).height(Length::FillPortion(3)), 
