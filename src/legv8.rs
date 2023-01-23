@@ -8,12 +8,12 @@ use bitvec::prelude::*;
 // C: CB-type, conditional branching
 // M: IM-type, moving shifted immediate to register
 
-enum Typ {R, I, D, B, C, M}
+pub enum Typ {R, I, D, B, C, M}
 
 
-struct Instruction{
-	typ: Typ,
-	op: char,
-    regs: Vec<String>,
-    addr: BitVec    
+pub struct Instruction{
+	pub typ: Typ,
+	pub op: char,
+    pub regs: Vec<String>,
+    pub addr: BitVec    
 }

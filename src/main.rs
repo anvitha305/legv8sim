@@ -1,13 +1,28 @@
 #![windows_subsystem = "windows"] 
+
+// iced for GUI-related things
 use iced::widget::{button, container, column, row, text, text_input, scrollable};
-use iced::{Alignment, Element, Font, Color, Length, Sandbox, Settings};
+use iced::{Alignment, Element, Font, Length, Sandbox, Settings};
+use iced::theme::{Theme};
+
+// file i/o stuff lol
 use std::fs::File;
 use std::io::prelude::*;
-use iced::theme::{Theme};
+
+// syntect for parsing and highlighting with the .sublime-syntax file.
+use syntect::easy::HighlightLines;
+use syntect::parsing::SyntaxSet;
+use std::path::Path;
+use syntect::highlighting::{ThemeSet, Style};
+use syntect::util::{as_24_bit_terminal_escaped, LinesWithEndings};
+
+// external modules used in creating structures for the simulator
 mod legv8;
 mod registers;
 use registers::registers as regs;
 use crate::regs::registers;
+use crate::legv8::Instruction;
+
 pub fn main() -> iced::Result {
     Simulator::run(Settings::default())
 }
@@ -19,9 +34,21 @@ fn readfile(fname: &str) -> std::io::Result<String>{
     Ok(code)
 }
 
+fn parse(code: &str){
+    let ss = SyntaxSet::load_from_folder(Path::new("./syntax/legv8.sublime-syntax")).unwrap();
+    let ts = ThemeSet::load_defaults();
+    let syntax = ss.find_syntax_by_extension("s").unwrap();
+    let mut h = HighlightLines::new(syntax, &ts.themes["base16-ocean.dark"]);
+    for line in LinesWithEndings::from(code) {
+        let ranges: Vec<(Style, &str)> = h.highlight_line(line, &ss).unwrap();
+        let escaped = as_24_bit_terminal_escaped(&ranges[..], true);
+        print!("{}", escaped);
+    }
+}
 
 struct Simulator{
    regs: Vec<registers::Reg>,
+   instructions: Vec<Instruction>,
    main_mem: Vec<f32>,
    st: String,
    darkmode: bool,
@@ -42,7 +69,7 @@ impl Sandbox for Simulator{
         for i in 0..32 {
             a.push(registers::Reg{val: 0.0, name: format!("X{}", i)})
         }
-        Self { regs: a, main_mem:Vec::new(), darkmode:true,
+        Self { regs: a, main_mem:Vec::new(), instructions:Vec::new(), darkmode:true,
         st:"".to_string(), code:"".to_string()}
         
     }
@@ -66,6 +93,7 @@ impl Sandbox for Simulator{
                 if v.len() != 2 || v[1].ne("s"){
                     self.code = "Please use a .s assembly file to simulate.".to_string();
                 }
+                parse(&self.code);
                 self.regs[0].val += 10.5;
             }
             Message::ThemeChange => {
