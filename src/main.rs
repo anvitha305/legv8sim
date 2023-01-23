@@ -35,14 +35,14 @@ fn readfile(fname: &str) -> std::io::Result<String>{
 }
 
 fn parse(code: &str){
-    let ss = SyntaxSet::load_from_folder(Path::new("./syntax/legv8.sublime-syntax")).unwrap();
+    let ss = SyntaxSet::load_from_folder("src/syntax/legv8.sublime-syntax").unwrap();
     let ts = ThemeSet::load_defaults();
-    let syntax = ss.find_syntax_by_extension("s").unwrap();
-    let mut h = HighlightLines::new(syntax, &ts.themes["base16-ocean.dark"]);
+    let syntax = ss.find_syntax_by_extension("s").unwrap_or_else(||ss.find_syntax_plain_text());
+    let mut h = HighlightLines::new(syntax, &ts.themes["base16-mocha.dark"]);
     for line in LinesWithEndings::from(code) {
         let ranges: Vec<(Style, &str)> = h.highlight_line(line, &ss).unwrap();
         let escaped = as_24_bit_terminal_escaped(&ranges[..], true);
-        print!("{}", escaped);
+        print!("{}\n", escaped);
     }
 }
 
@@ -84,7 +84,7 @@ impl Sandbox for Simulator{
                 self.st = s;
             }
             Message::FileOpen => {
-                let result = readfile(&self.st);
+                let mut result = readfile(&self.st);
                 self.code = match result {
                     Ok(val) => val,
                     Err(_err) => "Error reading your file.".to_string()
@@ -94,6 +94,8 @@ impl Sandbox for Simulator{
                     self.code = "Please use a .s assembly file to simulate.".to_string();
                 }
                 parse(&self.code);
+                
+                
                 self.regs[0].val += 10.5;
             }
             Message::ThemeChange => {
