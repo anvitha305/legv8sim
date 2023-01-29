@@ -34,16 +34,25 @@ fn readfile(fname: &str) -> std::io::Result<String>{
     Ok(code)
 }
 
-fn parse(code: &str){
+fn parse(code: &str)-> (Vec<Style>, Vec<String>){
     let ss = SyntaxSet::load_from_folder("src/syntax/legv8.sublime-syntax").unwrap();
     let ts = ThemeSet::load_defaults();
     let syntax = ss.find_syntax_by_extension("s").unwrap_or_else(||ss.find_syntax_plain_text());
-    let mut h = HighlightLines::new(syntax, &ts.themes["Solarized (light)"]);
+    let mut h = HighlightLines::new(syntax, &ts.themes["Solarized (dark)"]);
+    let mut sty: Vec<Style> = Vec::new();
+    let mut stat: Vec<&str> = Vec::new();
     for line in LinesWithEndings::from(code) {
         let ranges: Vec<(Style, &str)> = h.highlight_line(line, &ss).unwrap();
         let escaped = as_24_bit_terminal_escaped(&ranges[..], true);
-        print!("{}\n", escaped);
+        let (mut sty1, mut stat1): (Vec<Style>, Vec<&str>) = ranges.into_iter().unzip();
+        sty.append(&mut sty1);
+        stat.append(&mut stat1);
+        print!("{:#?}", sty1);
+        print!("{}", escaped);
     }
+    print!("\n");
+    let statstr: Vec<String> = stat.iter().map(|s| s.to_string()).collect();
+    return (sty, statstr);
 }
 
 struct Simulator{
@@ -52,7 +61,8 @@ struct Simulator{
    main_mem: Vec<f32>,
    st: String,
    darkmode: bool,
-   code: String
+   code: String,
+   styles: (Vec<Style>, Vec<String>),
 }
 
 #[derive(Debug, Clone)]
@@ -70,7 +80,7 @@ impl Sandbox for Simulator{
             a.push(registers::Reg{val: 0.0, name: format!("X{}", i)})
         }
         Self { regs: a, main_mem:Vec::new(), instructions:Vec::new(), darkmode:true,
-        st:"".to_string(), code:"".to_string()}
+        st:"".to_string(), code:"".to_string(), styles:(Vec::new(), Vec::new())}
         
     }
      
@@ -86,14 +96,16 @@ impl Sandbox for Simulator{
             Message::FileOpen => {
                 let mut result = readfile(&self.st);
                 self.code = match result {
-                    Ok(val) => val,
-                    Err(_err) => "Error reading your file.".to_string()
+                    Ok(ref val) => val.to_string(),
+                    Err(ref _err) => "Error reading your file.".to_string()
                 };
                 let v: Vec<&str> = self.st.split('.').collect();
                 if v.len() != 2 || v[1].ne("s"){
                     self.code = "Please use a .s assembly file to simulate.".to_string();
                 }
-                parse(&self.code);
+                if result.is_ok(){
+                    styles = parse(&self.code)
+                }
                 
                 
                 self.regs[0].val += 10.5;
