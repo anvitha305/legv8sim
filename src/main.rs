@@ -104,7 +104,7 @@ impl Sandbox for Simulator{
                     self.code = "Please use a .s assembly file to simulate.".to_string();
                 }
                 if result.is_ok(){
-                    styles = parse(&self.code)
+                    self.styles = parse(&self.code)
                 }
                 
                 
