@@ -185,7 +185,7 @@ impl Sandbox for Simulator<'_>{
         // set up the whole appplication
         Element::from(column![column![
             row![text("File viewer").font(BOLD_FONT).size(30),button("Toggle Theme").on_press(Message::ThemeChange)].spacing(10).align_items(Alignment::Center), 
-            row![text("Name of file to be simulated").size(20).padding(20)].align_items(Alignment::Center),
+            row![text("Name of file to be simulated").size(20)].padding(20).align_items(Alignment::Center),
             row![text_input(&String::new(), &self.fname, Message::Input), 
             button("Ok").on_press(Message::FileOpen)].align_items(Alignment::Center)].padding(30),container(scrollable(content)).height(Length::FillPortion(3)), 
             row![registers(self.regs.clone()), text("memory placeholder lol")]].height(Length::FillPortion(3)).width(Length::Fill).padding(20))
