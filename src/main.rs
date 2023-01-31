@@ -1,8 +1,8 @@
 #![windows_subsystem = "windows"] 
 
 // iced for GUI-related things
-use iced::widget::{button, container, column, row, text, text_input, scrollable};
-use iced::{Alignment, Element, Font, Length, Sandbox, Settings};
+use iced::widget::{Row, button, container, column, row, text, text_input, scrollable};
+use iced::{Alignment, Color, Element, Font, Length, Sandbox, Settings};
 use iced::theme::{Theme};
 
 // file i/o stuff lol
@@ -14,8 +14,9 @@ use syntect::easy::HighlightLines;
 use syntect::parsing::SyntaxSet;
 use std::path::Path;
 use syntect::highlighting::{ThemeSet, Style};
+use syntect::highlighting::Color as OtherColor;
 use syntect::util::{as_24_bit_terminal_escaped, LinesWithEndings};
-
+use iced::widget::text::Text;
 // external modules used in creating structures for the simulator
 mod legv8;
 mod registers;
@@ -45,9 +46,11 @@ fn parse(code: &str)-> (Vec<Style>, Vec<String>){
         let ranges: Vec<(Style, &str)> = h.highlight_line(line, &ss).unwrap();
         let escaped = as_24_bit_terminal_escaped(&ranges[..], true);
         let (mut sty1, mut stat1): (Vec<Style>, Vec<&str>) = ranges.into_iter().unzip();
+        sty1.push(sty1.last().cloned().unwrap());
+        stat1.push("\n");
         sty.append(&mut sty1);
         stat.append(&mut stat1);
-        print!("{:#?}", sty1);
+        
         print!("{}", escaped);
     }
     print!("\n");
@@ -55,14 +58,14 @@ fn parse(code: &str)-> (Vec<Style>, Vec<String>){
     return (sty, statstr);
 }
 
-struct Simulator{
+struct Simulator<'a>{
    regs: Vec<registers::Reg>,
    instructions: Vec<Instruction>,
    main_mem: Vec<f32>,
    st: String,
    darkmode: bool,
    code: String,
-   styles: (Vec<Style>, Vec<String>),
+   codes: Vec<Text<'a>>,
 }
 
 #[derive(Debug, Clone)]
@@ -72,7 +75,7 @@ pub enum Message {
     ThemeChange
 }
 
-impl Sandbox for Simulator{
+impl Sandbox for Simulator<'_>{
     type Message = Message;
     fn new() -> Self {
         let mut a = Vec::new();
@@ -80,7 +83,7 @@ impl Sandbox for Simulator{
             a.push(registers::Reg{val: 0.0, name: format!("X{}", i)})
         }
         Self { regs: a, main_mem:Vec::new(), instructions:Vec::new(), darkmode:true,
-        st:"".to_string(), code:"".to_string(), styles:(Vec::new(), Vec::new())}
+        st:"".to_string(), code:"".to_string(), codes: Vec::new()}
         
     }
      
@@ -94,7 +97,7 @@ impl Sandbox for Simulator{
                 self.st = s;
             }
             Message::FileOpen => {
-                let mut result = readfile(&self.st);
+                let result = readfile(&self.st);
                 self.code = match result {
                     Ok(ref val) => val.to_string(),
                     Err(ref _err) => "Error reading your file.".to_string()
@@ -103,8 +106,17 @@ impl Sandbox for Simulator{
                 if v.len() != 2 || v[1].ne("s"){
                     self.code = "Please use a .s assembly file to simulate.".to_string();
                 }
+                self.codes.clear();
                 if result.is_ok(){
-                    self.styles = parse(&self.code)
+                    let styles: (Vec<Style>, Vec<String>) = parse(&self.code);
+                    for x in 0..(styles.0).len()  {
+                        let a: OtherColor = styles.0[x].foreground;
+                        self.codes.push(Text::new(styles.1[x].clone()).style(Color::from_rgb((a.r as f32)/255.0, (a.g as f32)/255.0, (a.b as f32)/255.0)).into());
+                    }
+
+                }
+                else {
+                    self.codes.push(Text::new(self.code.clone()).into());
                 }
                 
                 
@@ -120,11 +132,13 @@ impl Sandbox for Simulator{
     fn view(&self) -> Element<Message> {
         const BOLD_FONT: Font = Font::External { 
             name: "bold font",
-            bytes: include_bytes!("resources/Lato-Black.ttf")};
-        let content: Element<_> = container(
-            row![text(&self.code)].align_items(Alignment::Start).padding(30))
-            .width(Length::Fill)
-        .into();
+            bytes: include_bytes!("resources/Lato-Black.ttf")};  
+        let mut a: Row<Message> = Row::new();
+        for i in 0..self.codes.len() {
+            a = a.push(row![self.codes[i].to_owned()]);
+        }
+        let content: Element<_> = container(a.align_items(Alignment::Start).padding(30)).width(Length::Fill).into();
+        
         Element::from(column![column![
             row![text("File viewer").font(BOLD_FONT).size(30),button("Toggle Theme").on_press(Message::ThemeChange)].spacing(10).align_items(Alignment::Center), 
             row![text("Name of file to be simulated:").size(20)].align_items(Alignment::Center),
