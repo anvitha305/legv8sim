@@ -28,14 +28,20 @@ pub fn main() -> iced::Result {
     Simulator::run(Settings::default())
 }
 
+// reads the contents of the file to be opened in the "editor view"
+// fname : name of file
+// returns : status of the opening 
 
-// reads the file to be ope
 fn readfile(fname: &str) -> std::io::Result<String>{
     let mut file = File::open(fname.to_string().trim())?;
     let mut code = String::new();
     file.read_to_string(&mut code)?;
     Ok(code)
 }
+
+// parses the code into legv8 code highlighting
+// code: the code to be highlighted, theme : theme name for the syntax highlighting
+// returns: tuple of parallel vectors of highlighting and particular strings
 
 fn parse(code: &str, theme: String)-> (Vec<Style>, Vec<String>){
     let ss = SyntaxSet::load_from_folder("src/syntax/legv8.sublime-syntax").unwrap();
@@ -46,28 +52,42 @@ fn parse(code: &str, theme: String)-> (Vec<Style>, Vec<String>){
     let mut stat: Vec<&str> = Vec::new();
     for line in LinesWithEndings::from(code) {
         let ranges: Vec<(Style, &str)> = h.highlight_line(line, &ss).unwrap();
-        let escaped = as_24_bit_terminal_escaped(&ranges[..], true);
         let (mut sty1, mut stat1): (Vec<Style>, Vec<&str>) = ranges.into_iter().unzip();
         sty1.push(sty1.last().cloned().unwrap());
         stat1.push("\n");
         sty.append(&mut sty1);
         stat.append(&mut stat1);
     }
-    print!("\n");
     let statstr: Vec<String> = stat.iter().map(|s| s.to_string()).collect();
     return (sty, statstr);
 }
 
+
+// represents the simulator structures for the application
+// regs : representation of the 32 registers in legv8
+// instructions : collection of instructions for the simulator
+// main_mem: address and value pairings
+// fname: file name for the legv8 assembly file
+// darkmode: whether the application is in dark mode
+// code: the code from file fname
+// styles: collection of corresponding highlighting and text
+// highlights: the actual styling of the text itself
+
 struct Simulator<'a>{
    regs: Vec<registers::Reg>,
    instructions: Vec<Instruction>,
-   main_mem: Vec<f32>,
-   st: String,
+   main_mem: Vec<(u16, f32)>,
+   fname: String,
    darkmode: bool,
    code: String,
    styles: (Vec<Style>, Vec<String>),
-   codes: Vec<Text<'a>>,
+   highlights: Vec<Text<'a>>,
 }
+
+// Enumerating the statuses of the application to update the app accordingly.
+// Input: When a file name is being typed in the input widget.
+// FileOpen: When the button to open the file is clicked.
+// Themechange: When the 'Toggle Theme' button is clicked.
 
 #[derive(Debug, Clone)]
 pub enum Message {
@@ -76,38 +96,43 @@ pub enum Message {
     ThemeChange
 }
 
+// creating the application based on the simulator representation.
 impl Sandbox for Simulator<'_>{
     type Message = Message;
+
+    // initializes the simulator, starts out in darkmode and all registers are value 0.
     fn new() -> Self {
         let mut a = Vec::new();
         for i in 0..32 {
             a.push(registers::Reg{val: 0.0, name: format!("X{}", i)})
         }
         Self { regs: a, main_mem:Vec::new(), instructions:Vec::new(), darkmode:true,
-        st:"".to_string(), code:"".to_string(), styles:(Vec::new(), Vec::new()), codes: Vec::new()}
+        st:"".to_string(), code:"".to_string(), styles:(Vec::new(), Vec::new()), highlights: Vec::new()}
         
     }
-     
+    // title of the app 
     fn title(&self) -> String {
         String::from("LEGV8 Simulator")
     }
+    // updates the application based on an event from the message
+    // message: the event that occured to cause the update to occur.
 
     fn update(&mut self, message: Message) {
         match message {
             Message::Input(s) => {
-                self.st = s;
+                self.fname = s;
             }
             Message::FileOpen => {
-                let result = readfile(&self.st);
+                let result = readfile(&self.fname);
                 self.code = match result {
                     Ok(ref val) => val.to_string(),
                     Err(ref _err) => "Error reading your file.".to_string()
                 };
-                let v: Vec<&str> = self.st.split('.').collect();
+                let v: Vec<&str> = self.fname.split('.').collect();
                 if v.len() != 2 || v[1].ne("s"){
                     self.code = "Please use a .s assembly file to simulate.".to_string();
                 }
-                self.codes.clear();
+                self.highlights.clear();
                 if result.is_ok(){
                     let mut theme:String = "".to_string();
                     if self.darkmode {
@@ -119,16 +144,13 @@ impl Sandbox for Simulator<'_>{
                     self.styles = parse(&self.code, theme);
                     for x in 0..(self.styles.0).len()  {
                         let a: OtherColor = self.styles.0[x].foreground;
-                        self.codes.push(Text::new(self.styles.1[x].clone()).style(Color::from_rgb((a.r as f32)/255.0, (a.g as f32)/255.0, (a.b as f32)/255.0)).into());
+                        self.highlights.push(Text::new(self.styles.1[x].clone()).style(Color::from_rgb((a.r as f32)/255.0, (a.g as f32)/255.0, (a.b as f32)/255.0)).into());
                     }
 
                 }
                 else {
-                    self.codes.push(Text::new(self.code.clone()).into());
+                    self.highlights.push(Text::new(self.code.clone()).into());
                 }
-                
-                
-                self.regs[0].val += 10.5;
             }
             Message::ThemeChange => {
                 self.darkmode = !self.darkmode;
@@ -137,35 +159,41 @@ impl Sandbox for Simulator<'_>{
 
         }
     }
+    // view the current state of the simulator
+    // returns: the rendering for the application.
 
     fn view(&self) -> Element<Message> {
         const BOLD_FONT: Font = Font::External { 
             name: "bold font",
-            bytes: include_bytes!("resources/Lato-Black.ttf")};  
+            bytes: include_bytes!("resources/Lato-Black.ttf")};
+        // sets up the text highlighting from the content
         let mut a: Column<Message> = Column::new();
         let mut b: Row<Message> = Row::new();
-        
         if self.styles.1.len() > 0 {
-        for i in 0..self.codes.len() {
+        for i in 0..self.highlights.len() {
             
             if self.styles.1[i].contains("\n") {
                 a = a.push(b);
                 b = Row::new();
             }
             else {
-                b = b.push(self.codes[i].to_owned());
+                b = b.push(self.highlights[i].to_owned());
             }
             
         }}
         let content: Element<_> = container(a.align_items(Alignment::Start).padding(30)).width(Length::Fill).into();
-        
+        // set up the whole appplication
         Element::from(column![column![
             row![text("File viewer").font(BOLD_FONT).size(30),button("Toggle Theme").on_press(Message::ThemeChange)].spacing(10).align_items(Alignment::Center), 
             row![text("Name of file to be simulated:").size(20)].align_items(Alignment::Center),
-            row![text_input(&String::new(), &self.st, Message::Input), 
+            row![text_input(&String::new(), &self.fname, Message::Input), 
             button("Ok").on_press(Message::FileOpen)].align_items(Alignment::Center)].padding(30),container(scrollable(content)).height(Length::FillPortion(3)), 
             row![registers(self.regs.clone()), text("memory placeholder lol")]].height(Length::FillPortion(3)).width(Length::Fill).padding(20))
     }
+
+    // Updates the theme based on if the darkmode indicator is selected or not from the input button.
+    // returns: Theme [variable configuring the application colors]
+
     fn theme(&self) -> Theme {
         if self.darkmode {
             Theme::Dark 
