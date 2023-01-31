@@ -52,8 +52,6 @@ fn parse(code: &str, theme: String)-> (Vec<Style>, Vec<String>){
         stat1.push("\n");
         sty.append(&mut sty1);
         stat.append(&mut stat1);
-        
-        print!("{}", escaped);
     }
     print!("\n");
     let statstr: Vec<String> = stat.iter().map(|s| s.to_string()).collect();
@@ -113,10 +111,10 @@ impl Sandbox for Simulator<'_>{
                 if result.is_ok(){
                     let mut theme:String = "".to_string();
                     if self.darkmode {
-                        theme = "Solarized (dark)".to_string();
+                        theme = "base16-ocean.dark".to_string();
                     }
                     else {
-                        theme = "base16-ocean.dark".to_string();
+                        theme = "Solarized (dark)".to_string();
                     }
                     self.styles = parse(&self.code, theme);
                     for x in 0..(self.styles.0).len()  {
