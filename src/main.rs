@@ -107,7 +107,7 @@ impl Sandbox for Simulator<'_>{
             a.push(registers::Reg{val: 0.0, name: format!("X{}", i)})
         }
         Self { regs: a, main_mem:Vec::new(), instructions:Vec::new(), darkmode:true,
-        st:"".to_string(), code:"".to_string(), styles:(Vec::new(), Vec::new()), highlights: Vec::new()}
+        fname:"".to_string(), code:"".to_string(), styles:(Vec::new(), Vec::new()), highlights: Vec::new()}
         
     }
     // title of the app 
