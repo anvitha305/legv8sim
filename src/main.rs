@@ -1,7 +1,7 @@
 #![windows_subsystem = "windows"] 
 
 // iced for GUI-related things
-use iced::widget::{Row, button, container, column, row, text, text_input, scrollable};
+use iced::widget::{Row, Column, button, container, column, row, text, text_input, scrollable};
 use iced::{Alignment, Color, Element, Font, Length, Sandbox, Settings};
 use iced::theme::{Theme};
 
@@ -28,6 +28,8 @@ pub fn main() -> iced::Result {
     Simulator::run(Settings::default())
 }
 
+
+// reads the file to be ope
 fn readfile(fname: &str) -> std::io::Result<String>{
     let mut file = File::open(fname.to_string().trim())?;
     let mut code = String::new();
@@ -35,11 +37,11 @@ fn readfile(fname: &str) -> std::io::Result<String>{
     Ok(code)
 }
 
-fn parse(code: &str)-> (Vec<Style>, Vec<String>){
+fn parse(code: &str, theme: String)-> (Vec<Style>, Vec<String>){
     let ss = SyntaxSet::load_from_folder("src/syntax/legv8.sublime-syntax").unwrap();
     let ts = ThemeSet::load_defaults();
     let syntax = ss.find_syntax_by_extension("s").unwrap_or_else(||ss.find_syntax_plain_text());
-    let mut h = HighlightLines::new(syntax, &ts.themes["Solarized (dark)"]);
+    let mut h = HighlightLines::new(syntax, &ts.themes[&theme]);
     let mut sty: Vec<Style> = Vec::new();
     let mut stat: Vec<&str> = Vec::new();
     for line in LinesWithEndings::from(code) {
@@ -65,6 +67,7 @@ struct Simulator<'a>{
    st: String,
    darkmode: bool,
    code: String,
+   styles: (Vec<Style>, Vec<String>),
    codes: Vec<Text<'a>>,
 }
 
@@ -83,7 +86,7 @@ impl Sandbox for Simulator<'_>{
             a.push(registers::Reg{val: 0.0, name: format!("X{}", i)})
         }
         Self { regs: a, main_mem:Vec::new(), instructions:Vec::new(), darkmode:true,
-        st:"".to_string(), code:"".to_string(), codes: Vec::new()}
+        st:"".to_string(), code:"".to_string(), styles:(Vec::new(), Vec::new()), codes: Vec::new()}
         
     }
      
@@ -108,10 +111,17 @@ impl Sandbox for Simulator<'_>{
                 }
                 self.codes.clear();
                 if result.is_ok(){
-                    let styles: (Vec<Style>, Vec<String>) = parse(&self.code);
-                    for x in 0..(styles.0).len()  {
-                        let a: OtherColor = styles.0[x].foreground;
-                        self.codes.push(Text::new(styles.1[x].clone()).style(Color::from_rgb((a.r as f32)/255.0, (a.g as f32)/255.0, (a.b as f32)/255.0)).into());
+                    let mut theme:String = "".to_string();
+                    if self.darkmode {
+                        theme = "Solarized (dark)".to_string();
+                    }
+                    else {
+                        theme = "base16-ocean.dark".to_string();
+                    }
+                    self.styles = parse(&self.code, theme);
+                    for x in 0..(self.styles.0).len()  {
+                        let a: OtherColor = self.styles.0[x].foreground;
+                        self.codes.push(Text::new(self.styles.1[x].clone()).style(Color::from_rgb((a.r as f32)/255.0, (a.g as f32)/255.0, (a.b as f32)/255.0)).into());
                     }
 
                 }
@@ -124,6 +134,7 @@ impl Sandbox for Simulator<'_>{
             }
             Message::ThemeChange => {
                 self.darkmode = !self.darkmode;
+                self.update(Message::FileOpen);
             }
 
         }
@@ -133,10 +144,21 @@ impl Sandbox for Simulator<'_>{
         const BOLD_FONT: Font = Font::External { 
             name: "bold font",
             bytes: include_bytes!("resources/Lato-Black.ttf")};  
-        let mut a: Row<Message> = Row::new();
+        let mut a: Column<Message> = Column::new();
+        let mut b: Row<Message> = Row::new();
+        
+        if self.styles.1.len() > 0 {
         for i in 0..self.codes.len() {
-            a = a.push(row![self.codes[i].to_owned()]);
-        }
+            
+            if self.styles.1[i].contains("\n") {
+                a = a.push(b);
+                b = Row::new();
+            }
+            else {
+                b = b.push(self.codes[i].to_owned());
+            }
+            
+        }}
         let content: Element<_> = container(a.align_items(Alignment::Start).padding(30)).width(Length::Fill).into();
         
         Element::from(column![column![
