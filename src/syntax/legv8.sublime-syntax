@@ -30,17 +30,17 @@ contexts:
     # instructions:
     # im-type instructions
     - match: '\b(?i)(mov(k|z)?)\b'
-      scope: keyword.operator.word.asm
+      scope: keyword.control.asm
     # d-type instructions [complete set]
     - match: '\b(?i)((ldur)(b|h|sw)?|(ld|st)(xr|a)
       |(stur)(b|h|w)?)\b'
-      scope: keyword.operator.word.asm
+      scope: keyword.control.asm
     # i-type instructions [complete set]
     - match: '\b(?i)((add|sub)i(s)?|andis|{{log}}i?|cmpi|ldi)\b'
-      scope: keyword.operator.word.asm
+      scope: keyword.control.asm
     # r-type instructions [complete set]
     - match: \b(?i)(ands|(f({{ops}}|cmp))(s|d)|(?i){{ops}}(s)?|{{log}})|(br|ls(l|r)|(s|u)(div|mulh)|(ldur|stur)(s|d)|cmp)\b
-      scope: keyword.operator.word.asm
+      scope: keyword.control.asm
     # cb-type instructions [complete set]
     - match: '\b((?i)(cb(n)?z|b\.{{cond}}))\b'
       scope: keyword.control.asm
