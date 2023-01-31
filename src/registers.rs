@@ -6,11 +6,16 @@ pub struct Reg{
     pub name: String,
 }
 
+// module that renders the registers 
 pub mod registers {
     use crate::registers::Reg;
     use crate::Message;
     use iced::widget::{Row, column, row, text};
     use iced::{Element, Color, Font};
+
+    // generates the register representation text from the vector containing all the registers
+    // regs : the registers in legv8
+    // returns : the rendering of the register representation.
     pub fn registers<'a>(regs: Vec<Reg>) -> Element<'a, Message> {
         const BOLD_FONT: Font = Font::External { 
             name: "bold font",
@@ -20,6 +25,8 @@ pub mod registers {
         let mut r3 = Vec::<Element<Message>>::new();
         let mut r4 = Vec::<Element<Message>>::new();
         let mut rnum = 8;
+
+        // i'm SORRY THIS IS UGGY </3 IT'S JUST . 2D PUSHING TO A COLUMN IS NOT FUN.
         for reg in &regs[0..(regs.len()/4)] {
             let mut s = reg.name.clone();
             s.insert(1,'0');
