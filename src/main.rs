@@ -12,10 +12,9 @@ use std::io::prelude::*;
 // syntect for parsing and highlighting with the .sublime-syntax file.
 use syntect::easy::HighlightLines;
 use syntect::parsing::SyntaxSet;
-use std::path::Path;
 use syntect::highlighting::{ThemeSet, Style};
 use syntect::highlighting::Color as OtherColor;
-use syntect::util::{as_24_bit_terminal_escaped, LinesWithEndings};
+use syntect::util::{LinesWithEndings};
 use iced::widget::text::Text;
 // external modules used in creating structures for the simulator
 mod legv8;
@@ -187,8 +186,8 @@ impl Sandbox for Simulator<'_>{
             row![text("File viewer").font(BOLD_FONT).size(30),button("Toggle Theme").on_press(Message::ThemeChange)].spacing(10).align_items(Alignment::Center), 
             row![text("Name of file to be simulated").size(20)].align_items(Alignment::Start),
             row![text_input(&String::new(), &self.fname, Message::Input), 
-            button("Ok").on_press(Message::FileOpen)].align_items(Alignment::Center)].padding(30),container(scrollable(content)).height(Length::FillPortion(3)), 
-            row![registers(self.regs.clone()), text("memory placeholder lol")]].height(Length::FillPortion(3)).width(Length::Fill).padding(20))
+            button("Ok").on_press(Message::FileOpen)].align_items(Alignment::Center)].padding(30),container(scrollable(content)).height(Length::FillPortion(4)), 
+            row![registers(self.regs.clone()), text("memory placeholder lol")]].height(Length::FillPortion(4)).width(Length::Fill).padding(20))
     }
 
     // Updates the theme based on if the darkmode indicator is selected or not from the input button.
