@@ -128,10 +128,11 @@ impl Sandbox for Simulator<'_>{
                     Err(ref _err) => "Error reading your file.".to_string()
                 };
                 let v: Vec<&str> = self.fname.split('.').collect();
+                self.highlights.clear();
                 if v.len() != 2 || v[1].ne("s"){
                     self.code = "Please use a .s assembly file to simulate.".to_string();
                 }
-                self.highlights.clear();
+                else {
                 if result.is_ok(){
                     let mut theme:String = "".to_string();
                     if self.darkmode {
@@ -151,13 +152,15 @@ impl Sandbox for Simulator<'_>{
                     self.highlights.push(Text::new(self.code.clone()).into());
                 }
             }
+        }
             Message::ThemeChange => {
                 self.darkmode = !self.darkmode;
                 self.update(Message::FileOpen);
             }
 
-        }
+        
     }
+}
     // view the current state of the simulator
     // returns: the rendering for the application.
 
@@ -180,6 +183,9 @@ impl Sandbox for Simulator<'_>{
             }
             
         }}
+        else {
+            a = a.push(text(self.code.clone()));
+        }
         let content: Element<_> = container(a.align_items(Alignment::Start).padding(30)).width(Length::Fill).into();
         // set up the whole appplication
         Element::from(column![column![
