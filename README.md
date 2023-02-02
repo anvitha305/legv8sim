@@ -12,5 +12,6 @@ Not really a version of the simulator, but rather Sublime editor's highlighting 
 - [Syntect](https://github.com/trishume/syntect)
 
 ## References
+- Huge thank you to [@generic-github-user](https://github.com/generic-github-user) for design advice (this would be substantively more ugly without your genius)
 - [LEG-V8 Green Card](https://montcs.bloomu.edu/Information/ARMv8/legv8-green-card.compressed.pdf)
 - [Computer Organization and Design: The Hardware/Software Interface ARM Edition](https://g.co/kgs/8cbQrC) by D. Patterson and J. Hennessy, Morgan Kaufmann, 2016. ISBN: 978-012-8017333.
