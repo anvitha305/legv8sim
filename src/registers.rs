@@ -53,8 +53,8 @@ pub mod registers {
         for reg in &regs[(3*regs.len()/4)..(regs.len())] {
             r4.push(column![container(row![text(reg.name.clone()+ " ").font(BOLD_FONT), text(reg.val)]).style(iced::theme::Container::Box).width(Length::Units(110)).max_width(110)].spacing(30).padding(10).into());
         }
-        column![row!(text("Registers").font(BOLD_FONT).size(30)),Row::with_children(r1), Row::with_children(r2), 
-        Row::with_children(r3), Row::with_children(r4)].spacing(30).padding(30).into()
+        column![Row::with_children(r1), Row::with_children(r2), 
+        Row::with_children(r3), Row::with_children(r4)].spacing(20).padding(30).into()
         
     }
 }

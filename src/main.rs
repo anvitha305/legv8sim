@@ -193,7 +193,7 @@ impl Sandbox for Simulator<'_>{
             row![text("Name of file to be simulated").size(20)].align_items(Alignment::Start),
             row![text_input(&String::new(), &self.fname, Message::Input), 
             button("Ok").on_press(Message::FileOpen)].align_items(Alignment::Center)].padding(30),container(scrollable(content)).height(Length::FillPortion(5)), 
-            scrollable(row![registers(self.regs.clone())]).height(Length::FillPortion(5)),row![text("memory placeholder lol")].height(Length::FillPortion(3))].width(Length::Fill).padding(20))
+            row!(text("Registers").font(BOLD_FONT).size(30)).padding(30), scrollable(row![registers(self.regs.clone())]).height(Length::FillPortion(5)),row![text("memory placeholder lol")].height(Length::FillPortion(3))].width(Length::Fill).padding(20))
     }
 
     // Updates the theme based on if the darkmode indicator is selected or not from the input button.
