@@ -1,10 +1,9 @@
 #![windows_subsystem = "windows"] 
 
 // iced for GUI-related things
-use iced::widget::{Row, Column, button, container, column, row, text, text_input, scrollable};
+use iced::widget::{Row, Column, container, button, column, row, text, text_input, scrollable};
 use iced::{Alignment, Color, Element, Font, Length, Sandbox, Settings};
-use iced::theme::{Theme};
-
+use iced::theme::{Theme, Container};
 // file i/o stuff lol
 use std::fs::File;
 use std::io::prelude::*;
@@ -12,7 +11,7 @@ use std::io::prelude::*;
 // syntect for parsing and highlighting with the .sublime-syntax file.
 use syntect::easy::HighlightLines;
 use syntect::parsing::SyntaxSet;
-use syntect::highlighting::{ThemeSet, Style};
+use syntect::highlighting::{ThemeSet, Style as OtherStyle};
 use syntect::highlighting::Color as OtherColor;
 use syntect::util::{LinesWithEndings};
 use iced::widget::text::Text;
@@ -27,6 +26,18 @@ pub fn main() -> iced::Result {
     Simulator::run(Settings::default())
 }
 
+struct WhiteFrame;
+
+impl container::StyleSheet for WhiteFrame {
+    type Style = iced::theme::Theme;
+
+    fn appearance(&self, style: &Self::Style) -> container::Appearance {
+        container::Appearance {
+            background: iced::Color::from_rgb(1.0, 1.0, 1.0).into(),
+            ..Default::default()
+        }
+    }
+}
 // reads the contents of the file to be opened in the "editor view"
 // fname : name of file
 // returns : status of the opening 
@@ -42,16 +53,16 @@ fn readfile(fname: &str) -> std::io::Result<String>{
 // code: the code to be highlighted, theme : theme name for the syntax highlighting
 // returns: tuple of parallel vectors of highlighting and particular strings
 
-fn parse(code: &str, theme: String)-> (Vec<Style>, Vec<String>){
+fn parse(code: &str, theme: String)-> (Vec<OtherStyle>, Vec<String>){
     let ss = SyntaxSet::load_from_folder("src/syntax/legv8.sublime-syntax").unwrap();
     let ts = ThemeSet::load_defaults();
     let syntax = ss.find_syntax_by_extension("s").unwrap_or_else(||ss.find_syntax_plain_text());
     let mut h = HighlightLines::new(syntax, &ts.themes[&theme]);
-    let mut sty: Vec<Style> = Vec::new();
+    let mut sty: Vec<OtherStyle> = Vec::new();
     let mut stat: Vec<&str> = Vec::new();
     for line in LinesWithEndings::from(code) {
-        let ranges: Vec<(Style, &str)> = h.highlight_line(line, &ss).unwrap();
-        let (mut sty1, mut stat1): (Vec<Style>, Vec<&str>) = ranges.into_iter().unzip();
+        let ranges: Vec<(OtherStyle, &str)> = h.highlight_line(line, &ss).unwrap();
+        let (mut sty1, mut stat1): (Vec<OtherStyle>, Vec<&str>) = ranges.into_iter().unzip();
         sty1.push(sty1.last().cloned().unwrap());
         stat1.push("\n");
         sty.append(&mut sty1);
@@ -79,7 +90,7 @@ struct Simulator<'a>{
    fname: String,
    darkmode: bool,
    code: String,
-   styles: (Vec<Style>, Vec<String>),
+   styles: (Vec<OtherStyle>, Vec<String>),
    highlights: Vec<Text<'a>>,
 }
 
@@ -168,6 +179,9 @@ impl Sandbox for Simulator<'_>{
         const BOLD_FONT: Font = Font::External { 
             name: "bold font",
             bytes: include_bytes!("resources/Lato-Black.ttf")};
+        let theme = Container::Custom(
+            Box::new(WhiteFrame) as Box<dyn container::StyleSheet<Style = iced::theme::Theme>>
+        );
         // sets up the text highlighting from the content
         let mut a: Column<Message> = Column::new();
         let mut b: Row<Message> = Row::new();
@@ -186,13 +200,13 @@ impl Sandbox for Simulator<'_>{
         else {
             a = a.push(text(self.code.clone()));
         }
-        let content: Element<_> = container(a.align_items(Alignment::Start).padding(30)).width(Length::Fill).into();
+        let content: Element<_> = scrollable(container(a.align_items(Alignment::Start).padding(30)).width(Length::Fill)).into();
         // set up the whole appplication
         Element::from(column![column![
             row![text("File viewer").font(BOLD_FONT).size(30),button("Toggle Theme").on_press(Message::ThemeChange)].spacing(10).align_items(Alignment::Center), 
             row![text("Name of file to be simulated").size(20)].align_items(Alignment::Start),
             row![text_input(&String::new(), &self.fname, Message::Input), 
-            button("Ok").on_press(Message::FileOpen)].align_items(Alignment::Center)].padding(30),container(scrollable(content)).height(Length::FillPortion(5)), 
+            button("Ok").on_press(Message::FileOpen)].align_items(Alignment::Center)].padding(30),container(content).height(Length::FillPortion(5)), 
             row!(text("Registers").font(BOLD_FONT).size(30)).padding(30), scrollable(row![registers(self.regs.clone())]).height(Length::FillPortion(5)),row![text("memory placeholder lol")].height(Length::FillPortion(3))].width(Length::Fill).padding(20))
     }
 
