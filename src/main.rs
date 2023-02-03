@@ -8,7 +8,7 @@ use iced::theme::{Theme, Container};
 use std::fs::File;
 use std::io::prelude::*;
 
-// syntect for parsing and highlighting with the .sublime-syntax file.
+// syntect for highlighting with the .sublime-syntax file.
 use syntect::easy::HighlightLines;
 use syntect::parsing::SyntaxSet;
 use syntect::highlighting::{ThemeSet, Style as OtherStyle};
@@ -53,7 +53,7 @@ fn readfile(fname: &str) -> std::io::Result<String>{
 // code: the code to be highlighted, theme : theme name for the syntax highlighting
 // returns: tuple of parallel vectors of highlighting and particular strings
 
-fn parse(code: &str, theme: String)-> (Vec<OtherStyle>, Vec<String>){
+fn highlight(code: &str, theme: String)-> (Vec<OtherStyle>, Vec<String>){
     let ss = SyntaxSet::load_from_folder("src/syntax/legv8.sublime-syntax").unwrap();
     let ts = ThemeSet::load_defaults();
     let syntax = ss.find_syntax_by_extension("s").unwrap_or_else(||ss.find_syntax_plain_text());
@@ -152,7 +152,7 @@ impl Sandbox for Simulator<'_>{
                     else {
                         theme = "Solarized (dark)".to_string();
                     }
-                    self.styles = parse(&self.code, theme);
+                    self.styles = highlight(&self.code, theme);
                     for x in 0..(self.styles.0).len()  {
                         let a: OtherColor = self.styles.0[x].foreground;
                         self.highlights.push(Text::new(self.styles.1[x].clone()).style(Color::from_rgb((a.r as f32)/255.0, (a.g as f32)/255.0, (a.b as f32)/255.0)).into());
