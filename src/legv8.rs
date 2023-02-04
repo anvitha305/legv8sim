@@ -2,7 +2,7 @@ use nom::{
     IResult,
     multi::{many0, many1},
     combinator::{map_res, recognize},
-    sequence::{preceded, delimited, terminated},
+    sequence::{preceded, delimited, terminated, tuple},
     character::complete::{char, one_of},
     bytes::complete::{tag, is_not},
   };
@@ -11,7 +11,18 @@ fn brack(input: &str) -> IResult<&str, &str> {
     delimited(char('['), is_not("]"), char(']'))(input)
 }
 
-// parses values we know immediately
+// recognizes comments 
+fn comment(input: &str) -> IResult<&str, &str> {
+    value(
+      "", // Output is thrown away.
+      pair(tag("//"),
+      is_not("\n\r"
+      )
+    )
+    )(input)
+}
+
+// recognizes values we know immediately
 fn imm(input: &str) -> IResult<&str, u16> {
     map_res(
       preceded(
@@ -24,13 +35,45 @@ fn imm(input: &str) -> IResult<&str, u16> {
       ),
       |out: &str| u16::from_str_radix(&str::replace(&out, "_", ""), 10)
     )(input)
-  }
-  fn main(){
+}
+
+// recognizes one of the numbered registers
+fn numreg(input: &str) -> IResult<&str, &str> {
+    recognize(
+      pair(
+        tag("x"), 
+        verify(
+          digit1, 
+          |s: &str| (0..31).contains(&(s.parse().unwrap())
+      )
+    )
+  )
+    )(input)
+}
+
+// recognizes one of the named registers and converts it to the numbered registers
+fn altreg(input: &str) -> IResult<&str, &str> {
+    alt((
+      value("sp", tag("x28")), 
+      value("fp", tag("x29")), 
+      value("lr", tag("x30")), 
+      value("xzr", tag("x31"))
+    )
+  )(input)
+}
+
+// combined parser for registers [both numbered and non numbered]
+fn reg(input: &str) -> IResult<&str, &str> {
+  alt ((
+    altreg,
+    numreg,
+  )
+  )(input)
+}
+
+fn main(){
       print!("{:#?}", imm("#34"))
-  }
-
-
-
+}
 
 
 // Type of instruction being used.
@@ -46,10 +89,9 @@ pub enum Typ {R, I, D, B, C, M}
 
 pub struct Instruction{
 	pub typ: Typ,
-	pub op: char,
-    pub regs: Vec<String>,
-    pub addr: u16    
+	pub instr: String,
+  pub regs: Vec<String>,
+  pub addr: u16    
 }
-
 
 //pub fn parse(code &str)->Option<Vec<Instruction>>{}
