@@ -1,11 +1,12 @@
 use nom::{
-    IResult,
-    multi::{many0, many1},
-    combinator::{map_res, recognize},
-    sequence::{preceded, delimited, terminated, tuple},
-    character::complete::{char, one_of},
-    bytes::complete::{tag, is_not},
-  };
+  IResult,
+  multi::{many0, many1},
+  combinator::{map_res, verify, value, opt, recognize},
+  sequence::{preceded, pair, delimited, tuple, terminated},
+  character::complete::{char, digit1, one_of},
+  branch::{alt},
+  bytes::complete::{tag, is_not},
+};
 // recognizes brackets for d-type instructions 
 fn brack(input: &str) -> IResult<&str, &str> {
     delimited(char('['), is_not("]"), char(']'))(input)
