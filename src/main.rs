@@ -21,6 +21,7 @@ mod registers;
 use registers::registers as regs;
 use crate::regs::registers;
 use crate::legv8::Instruction;
+use crate::legv8::Branch;
 
 pub fn main() -> iced::Result {
     Simulator::run(Settings::default())
@@ -85,7 +86,7 @@ fn highlight(code: &str, theme: String)-> (Vec<OtherStyle>, Vec<String>){
 
 struct Simulator<'a>{
    regs: Vec<registers::Reg>,
-   instructions: Vec<Instruction>,
+   instructions: Vec<Branch>,
    main_mem: Vec<(u16, f32)>,
    fname: String,
    darkmode: bool,

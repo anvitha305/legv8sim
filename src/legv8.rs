@@ -86,12 +86,16 @@ fn main(){
 
 pub enum Typ {R, I, D, B, C, M}
 
-
 pub struct Instruction{
 	pub typ: Typ,
 	pub instr: String,
   pub regs: Vec<String>,
   pub addr: u16    
+}
+
+pub struct Branch{
+  pub name: String,
+  pub inst: Vec<Instruction>
 }
 
 //pub fn parse(code &str)->Option<Vec<Instruction>>{}
