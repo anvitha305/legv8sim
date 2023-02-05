@@ -1,7 +1,7 @@
 %YAML 1.2
 ---
 name: LEG-V8
-file_extensions: [s]
+file_extensions: [s, legv8]
 scope: source.asm
 variables:
   bname: '[A-Za-z_][A-Za-z_0-9]*'
