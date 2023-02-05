@@ -55,10 +55,12 @@ fn numreg(input: &str) -> IResult<&str, &str> {
 // recognizes one of the named registers and converts it to the numbered registers
 fn altreg(input: &str) -> IResult<&str, &str> {
     alt((
-      value("sp", tag("x28")), 
-      value("fp", tag("x29")), 
-      value("lr", tag("x30")), 
-      value("xzr", tag("x31"))
+      value("x16", tag("ip0")),
+      value("x17", tag("ip0")),
+      value("x28", tag("sp")), 
+      value("x29", tag("fp")), 
+      value("x30", tag("lr")), 
+      value("x31", tag("xzr"))
     )
   )(input)
 }
