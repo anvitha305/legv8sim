@@ -72,11 +72,6 @@ fn reg(input: &str) -> IResult<&str, &str> {
   )(input)
 }
 
-fn main(){
-      print!("{:#?}", imm("#34"))
-}
-
-
 // Type of instruction being used.
 // R: R-type, register based operations
 // I: I-type, immediate instructions working with an immediate memory address.
