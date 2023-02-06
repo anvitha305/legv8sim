@@ -9,11 +9,6 @@ set ignorecase
 " constants in legv8
 syntax match constant "\v<#\d+>"
 
-" registers in legv8 [x0-x31]
-syntax match reg "\v<x[0-9]|[12][0-9]|[3][0-1]>"
-" alternate register names
-syntax match reg "\v<ip[0-1]|sp|fp|lr|xzr>"
 
 highlight default link constant Number
-highlight default link reg StorageClass
 
