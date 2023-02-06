@@ -10,6 +10,7 @@ Not really a version of the simulator, but rather Sublime editor's highlighting 
 ## Libraries Used
 - [Iced](https://iced.rs/)
 - [Syntect](https://github.com/trishume/syntect)
+- [Nom](https://github.com/rust-bakery/nom)
 
 ## References
 - Huge thank you to [@generic-github-user](https://github.com/generic-github-user) for design advice (this would be substantively more ugly without your genius)

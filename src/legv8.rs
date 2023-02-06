@@ -74,6 +74,23 @@ fn reg(input: &str) -> IResult<&str, &str> {
   )(input)
 }
 
+// parser for branch names [labeling them]
+fn branchLabel(input: &str, labels:Vec<String>) -> IResult<&str, &str> {
+  let output = recognize(terminated(is_not(":"), tag(":"))(input));
+  if output.is_ok() {
+    let labels = labels.push(output.unwrap().2);
+  }
+  return output;
+}
+
+// parsing for branching calls [different from branch labelling as in it jumps to]
+fn branchCall(input: &str, labels:Vec<String>) -> IResult<&str, &str>{
+  let mut branches: String = "";
+  for l in labels {
+    branches += labels;
+  }
+}
+
 // Type of instruction being used.
 // R: R-type, register based operations
 // I: I-type, immediate instructions working with an immediate memory address.
