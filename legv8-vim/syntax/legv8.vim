@@ -6,6 +6,10 @@
 " am allowing case differences for names of instructions, regs etc
 set ignorecase
 
+syntax keyword instructions 
+	\ add
+	\ addi
+
 " constants in legv8
 syntax match constant "\v<#\d+>"
 
