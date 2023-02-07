@@ -6,6 +6,6 @@ function! LIndent()
 	let previousNum = prevnonblank(v:lnum)
 	let prev = getline(previousNum)
 	if previous =~ "\:$" 
-		return indent(previousNum) +&tabstop
+		return indent(previousNum) + &tabstop
 	endif
 endfunction
