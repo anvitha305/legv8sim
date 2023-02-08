@@ -8,7 +8,7 @@ if exists('b:current_syntax') | finish| endif
 " ignore the case of register names, etc.
 syntax case ignore
 " constants in legv8
-syntax match constant "\#\d+\"
+syntax match constant "\v#\d+"
 
 " registers in legv8
 syntax match reg "\v<[Xx][0-9]>"
