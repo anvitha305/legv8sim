@@ -7,7 +7,7 @@ fact:
 else:
 	ADD		X9,X0,XZR
 	SUB 	SP, SP, #16
-	STUR 	X9, [SP, #0]
+	STUR 	X9, [SP, #0] 
 	STUR 	X30, [SP, #8]
 	SUB 	X0, X0, #1
 	BL		fact
