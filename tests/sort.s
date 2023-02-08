@@ -1,6 +1,5 @@
-
 // sorts an array, Patterson and Hennessy ARM edition ch 2
-sort: 
+sort:
 SUBI SP,SP,#40 // make room on stack for 5 registers
 STUR X30,[SP,#32] // save LR on stack
 STUR X22,[SP,#24] // save X22 on stack
@@ -37,5 +36,5 @@ STUR X20, [SP,#8] // restore X20 from stack
 STUR X21,[SP,#16] // restore X21 from stack
 STUR X22,[SP,#24] // restore X22 from stack
 STUR X30,[SP,#32] // restore LR from stack
-SUBI SP,SP,#40 // restore stack pointer
+SUBI SP,SP, #40 // restore stack pointer
 BR LR // return to calling routine
