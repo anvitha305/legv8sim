@@ -27,6 +27,7 @@ syntax match branch "\v.+:$"
 " keywords in legv8
 syntax match instructions "\vst[xu]r"
 syntax match instructions "\va[nd]di"
+syntax match instructions "\v.\(type\|globl\|data\|word\)"
 " begin highlighting the specific things outlined in matching patterns
 highlight default link constant Number
 highlight default link instructions Keyword
