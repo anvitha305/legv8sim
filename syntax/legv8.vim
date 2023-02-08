@@ -11,12 +11,12 @@ syntax case ignore
 syntax match constant "\v#\d+"
 
 " registers in legv8
-syntax match reg "\v<[Xx][0-9]>"
-syntax match reg "\v<[Xx][12][0-9]>"
-syntax match reg "\v<[Xx][3][0-1]>"
+syntax match reg "\v[Xx][0-9]"
+syntax match reg "\v[Xx][12][0-9]"
+syntax match reg "\v[Xx][3][0-1]"
 " alternate register names
-syntax match reg "\v<ip[0-1]|sp|fp|lr|xzr>"
-syntax match reg "\v<IP[0-1]|SP|FP|LR|XZR>"
+syntax match reg "\vip[0-1]|sp|fp|lr|xzr"
+syntax match reg "\vIP[0-1]|SP|FP|LR|XZR"
 
 " comments are // in this version of legv8.
 syntax match comment "\v\/\/.*$"
