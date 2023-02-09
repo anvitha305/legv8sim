@@ -27,10 +27,13 @@ syntax match instructions "\va[nd]d%[i]%[s]|lda"
 syntax match instructions "\vsub%[i]%[s]"
 syntax match instructions "\vmovz|mov%[k]"
 syntax match instructions "\vcb%[n]z|eor%[i]|orr%[i]"
-syntax match instructions "\vb[lr]|b.l[etso]|b.g[et]|b.h[is]|b.[vc][cs]"
-syntax match instructions "\vb.eq|b.ne|b.hs|b.mi|b.pl|b.al|b "
+syntax match instructions "\vb[lr]|b\.l[etso]|b\.g[et]|b\.h[is]|b\.[vc][cs]"
+syntax match instructions "\vb\.eq|b\.ne|b\.hs|b\.mi|b\.pl|b\.al|b "
 syntax match instructions "\vmul|[us]mulh|%[su]div|cmp%[i]"
 syntax match instructions "\vfadd[sd]|fsub[sd]|fmul[sd]|fdiv[sd]|fcmp[sd]"
+
+"branch labelling legv8
+syntax match branch "\v\h[\h\d].:$|\h[\h\d].\s$"
 
 " symbols for code segmenting
 syntax match symbol "\v\.type"
