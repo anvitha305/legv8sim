@@ -7,6 +7,11 @@ if exists('b:current_syntax') | finish| endif
 
 " ignore the case of register names, etc.
 syntax case ignore
+
+"branch labelling legv8
+syntax match branch "\v\h\w+:$"
+syntax match branch "\v\h\w+%[\s]$"
+
 " constants in legv8
 syntax match constant "\v#\d+"
 
@@ -24,10 +29,6 @@ syntax match instructions "\vb[lr]|b\.l[etso]|b\.g[et]|b\.h[is]|b\.[vc][cs]"
 syntax match instructions "\vb\.eq|b\.ne|b\.hs|b\.mi|b\.pl|b\.al|b "
 syntax match instructions "\vmul|[us]mulh|%[su]div|cmp%[i]"
 syntax match instructions "\vfadd[sd]|fsub[sd]|fmul[sd]|fdiv[sd]|fcmp[sd]"
-
-"branch labelling legv8
-syntax match branch "\v\h\w+:$"
-syntax match branch "\v\h\w+%[\s]$"
 
 " symbols for code segmenting
 syntax match symbol "\v\.type"
