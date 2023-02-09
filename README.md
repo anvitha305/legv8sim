@@ -4,8 +4,13 @@
 Not really a version of the simulator, but rather Sublime editor's highlighting syntax defined so that I can use a particular parsing library that got put into a package. Future verison(s) will include support for more code editors to have LEG-V8 syntax highlighting.
 
 <img width="491" alt="legv8 syntax highlighting in sublime" src="https://user-images.githubusercontent.com/44482134/213086258-32fa6c3a-bd7b-419b-a254-2064baf17c8c.png">
+[demo of version 1.0's syntax highlighting]
 
-\[demo of version 1.0's syntax highlighting]
+## Version 1.1 Vim Highlighting 🥰
+Vim syntax highlighting, to make legv8sim editor-agnostic in terms of development so that you can edit the files on most of the common editors but you run it all on the same simulator.
+
+<img width="422" alt="image" src="https://user-images.githubusercontent.com/44482134/217743095-3406f13f-a8fa-4476-81d9-377056e51b88.png">
+[demo of version 1.1's syntax highlighting]
 
 ## Libraries Used
 - [Iced](https://iced.rs/)
