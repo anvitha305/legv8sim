@@ -10,13 +10,6 @@ syntax case ignore
 " constants in legv8
 syntax match constant "\v#\d+"
 
-" registers in legv8
-syntax match reg "\v[Xx][0-9]"
-syntax match reg "\v[Xx][12][0-9]"
-syntax match reg "\v[Xx][3][0-1]"
-" alternate register names
-syntax match reg "\vip[0-1]|sp|fp|lr|xzr"
-
 " comments are // in this version of legv8.
 syntax match comment "\v\/\/.*$"
 
@@ -33,7 +26,8 @@ syntax match instructions "\vmul|[us]mulh|%[su]div|cmp%[i]"
 syntax match instructions "\vfadd[sd]|fsub[sd]|fmul[sd]|fdiv[sd]|fcmp[sd]"
 
 "branch labelling legv8
-syntax match branch "\v\h[\h\d].:$|\h[\h\d].\s$"
+syntax match branch "\v\h\w+:$"
+syntax match branch "\v\h\w+$"
 
 " symbols for code segmenting
 syntax match symbol "\v\.type"
@@ -41,6 +35,12 @@ syntax match symbol "\v\.glob%[a]l"
 syntax match symbol "\v\.data"
 syntax match symbol "\v\.word"
 
+" registers in legv8
+syntax match reg "\v[Xx][0-9i]"
+syntax match reg "\v[Xx][12][0-9]"
+syntax match reg "\v[Xx][3][0-1]"
+" alternate register names
+syntax match reg "\vip[0-1]|sp|fp|lr|xzr"
 
 " begin highlighting the specific things outlined in matching patterns
 highlight default link constant Number
