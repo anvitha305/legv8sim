@@ -9,8 +9,8 @@ if exists('b:current_syntax') | finish| endif
 syntax case ignore
 
 "branch labelling legv8
-syntax match branch "\v\h\w+:$"
-syntax match branch "\v\h\w+%[\s]$"
+syntax match branch "\v\h\w+"
+syntax match branch "\v\h\w+"
 
 " constants in legv8
 syntax match constant "\v#\d+"
