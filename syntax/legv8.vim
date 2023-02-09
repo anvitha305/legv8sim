@@ -27,7 +27,7 @@ syntax match instructions "\vfadd[sd]|fsub[sd]|fmul[sd]|fdiv[sd]|fcmp[sd]"
 
 "branch labelling legv8
 syntax match branch "\v\h\w+:$"
-syntax match branch "\v\h\w+$"
+syntax match branch "\v\h\w+%[\s]$"
 
 " symbols for code segmenting
 syntax match symbol "\v\.type"
