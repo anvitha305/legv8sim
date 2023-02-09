@@ -36,7 +36,7 @@ syntax match symbol "\v\.data"
 syntax match symbol "\v\.word"
 
 " registers in legv8
-syntax match reg "\v[Xx][0-9i]"
+syntax match reg "\v[Xx][0-9]"
 syntax match reg "\v[Xx][12][0-9]"
 syntax match reg "\v[Xx][3][0-1]"
 " alternate register names
