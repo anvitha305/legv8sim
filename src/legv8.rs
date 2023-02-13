@@ -96,5 +96,4 @@ pub struct Branch{
   pub name: String,
   pub inst: Vec<Instruction>
 }
-
 //pub fn parse(code &str)->Option<Vec<Instruction>>{}

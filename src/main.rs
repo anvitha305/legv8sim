@@ -24,7 +24,8 @@ use crate::legv8::Instruction;
 use crate::legv8::Branch;
 
 pub fn main() -> iced::Result {
-    Simulator::run(Settings::default())
+    //Simulator::run(Settings::default())
+    print!(":?", reg("SP"))
 }
 
 struct WhiteFrame;
