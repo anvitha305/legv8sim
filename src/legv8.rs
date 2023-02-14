@@ -8,12 +8,12 @@ use nom::{
   bytes::complete::{tag, is_not},
 };
 // recognizes brackets for d-type instructions 
-fn brack(input: &str) -> IResult<&str, &str> {
+pub fn brack(input: &str) -> IResult<&str, &str> {
     delimited(char('['), is_not("]"), char(']'))(input)
 }
 
 // recognizes comments 
-fn comment(input: &str) -> IResult<&str, &str> {
+pub fn comment(input: &str) -> IResult<&str, &str> {
     value(
       "", // Output is thrown away.
       pair(tag("//"),
@@ -24,7 +24,7 @@ fn comment(input: &str) -> IResult<&str, &str> {
 }
 
 // recognizes values we know immediately
-fn imm(input: &str) -> IResult<&str, u16> {
+pub fn imm(input: &str) -> IResult<&str, u16> {
     map_res(
       preceded(
         tag("#"),
@@ -39,7 +39,7 @@ fn imm(input: &str) -> IResult<&str, u16> {
 }
 
 // recognizes one of the numbered registers
-fn numreg(input: &str) -> IResult<&str, &str> {
+pub fn numreg(input: &str) -> IResult<&str, &str> {
     recognize(
       pair(
         tag("x"), 
@@ -53,7 +53,7 @@ fn numreg(input: &str) -> IResult<&str, &str> {
 }
 
 // recognizes one of the named registers and converts it to the numbered registers
-fn altreg(input: &str) -> IResult<&str, &str> {
+pub fn altreg(input: &str) -> IResult<&str, &str> {
     alt((
       value("x16", tag("ip0")),
       value("x17", tag("ip0")),
@@ -66,7 +66,7 @@ fn altreg(input: &str) -> IResult<&str, &str> {
 }
 
 // combined parser for registers [both numbered and non numbered]
-fn reg(input: &str) -> IResult<&str, &str> {
+pub fn reg(input: &str) -> IResult<&str, &str> {
   alt ((
     altreg,
     numreg,
