@@ -1,0 +1,43 @@
+\documentclass{article}
+\usepackage[hidelinks]{hyperref}
+\title{legv8sim: An Overview}
+\author{Anvitha Ramachandran}
+\date{February 2023}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+\section{Syntax Highlighting}
+Code in the simulator itself is highlighted, and there are syntax highlighting extensions for Sublime and Vim, and they are in progress for Emacs and VSCode.
+The GitHub repository \url{https://github.com/anvitha305/legv8sim} [especially the Releases page] has the best information on these two complete highlighting extensions. 
+\section{Parser Combinator}
+Although the library I used for syntax highlighting in the actual simulator also has parsing functionality, it needs to be ported to an instruction format that can be evaluated. This is not supported as of yet in that library, so I am using a different parsing library. In order to port the input file to a set of evaluatable instructions, I am writing smaller parser functions that recognize things like registers and immediate values and they form a parser combinator that analyzes each line of the input file and ports it to the structure of the Instruction type and creates a program structure in Rust that can be evaluated in the simulator, or an error if a line is not recognizable as LEGV8 assembly according to the green card specification. Programs are a vector of Branches which are vectors of Instructions and names of Branches are determined during parsing to label the Instructions accordingly. Since we don't need to handle something like left-recursion and it's a fairly small-spanning language that needs easy error emitting, we can sort of "get away" with using the parser combinator approach over using things like lexical analysis or LR parsing.
+
+\section{Simulator GUI}
+The simulator is essentially comprised of three views that let the user see their program and the registers/main memory it is acting on.
+
+\subsection{Code View}
+Has a widget that opens a file based on entering the file name and highlights the file. Will likely have an option that lets you select from the file menu instead of entering the name to facilitate an environment where the programs and the simulator itself are not so coupled.
+\subsection{Registers View}
+View of all the register names and corresponding values. If in debug mode, will have input fields for editing these values, but current version is static.
+\subsection{Memory View}
+View of main memory that will have an adjustable size upto size of max representable integer in the addr field of an instruction ($2^16-1$) and parser determines selected portion of the memory to preview though all of it can be viewed.
+
+\subsection{Additional Items}
+Stop/play button and instruction-level highlighting as it is the crux of the simulator. Menu that switches between Simulation and Debug mode so that user can manually input values to the registers and memory and also put in test cases in the format of selecting input registers and values and output registers and values.
+
+
+\section{Gradescopification}
+Since Gradescope offers Python-based autograder writing support for assignments in a language that isn't Java/C\#/Python, that's what I will be writing the autograder in. However, as Python isn't as strongly typed as something like Rust, I will likely be using PyO3 and Maturin in order to port the parser combinator functions over to Python and this allows reusal of the simulator code but for the purposes of grading as it would be ludicrous to have a manual process to open each student's file up in the simulator and manually configure test cases when the goal is to minimize repetition of menial tasks. Error output functions get ported in a similar way to the parser combinator functions and "memory view" and "registers view" will be ported to some form of ASCII representation of the widgets so they can be viewed on Gradescope in the event of an error. 
+
+
+\section{Challenges}
+\begin{itemize}
+    \item I am still waiting for Iced [the GUI library] to come out with multi-line text input support so that you can edit code directly in the simulator, as the way that Iced's rendering works is not conducive to that according to the multiple issues on its repository.
+    \item Finding examples of "partially correct" code to create a test suite to test the parser made from the parser combinators. I am primarily using examples that are readily available in Patterson and Hennessy's Computer Organization and Design that I can modify to be wrong so as to not publicly post code I have written, but not sure how to build a more robust and publicly available test suite for actually evaluating the code prior to testing it in a classroom environment.
+\end{itemize}
+
+
+\end{document}
