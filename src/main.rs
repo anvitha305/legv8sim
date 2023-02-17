@@ -25,7 +25,6 @@ use crate::legv8::Instruction;
 use crate::legv8::Branch;
 
 pub fn main() -> iced::Result {
-    print!("{:#?}", imm("#24"))
     Simulator::run(Settings::default())
 }
 

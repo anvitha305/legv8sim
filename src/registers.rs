@@ -33,25 +33,25 @@ pub mod registers {
         for reg in &regs[0..(regs.len()/4)] {
             let mut s = reg.name.clone();
             s.insert(1,'0');
-            r1.push(column![container(row![text(s+ " ").font(BOLD_FONT), text(reg.val)]).style(iced::theme::Container::Box).width(Length::Units(110)).max_width(110)].spacing(30).padding(10).into());
+            r1.push(column![container(row![text(s+ " ").font(BOLD_FONT), text(reg.val)]).style(iced::theme::Container::Box).width(Length::Units(90)).max_width(90)].spacing(30).padding(10).into());
             
         }
         for reg in &regs[(regs.len()/4)..(regs.len()/2)] {
             if rnum<10{
                 let mut s = reg.name.clone();
                 s.insert(1,'0');
-                r2.push(column![container(row![text(s+ " ").font(BOLD_FONT), text(reg.val)]).style(iced::theme::Container::Box).width(Length::Units(110)).max_width(110)].spacing(30).padding(10).into());
+                r2.push(column![container(row![text(s+ " ").font(BOLD_FONT), text(reg.val)]).style(iced::theme::Container::Box).width(Length::Units(90)).max_width(90)].spacing(30).padding(10).into());
             }
             else {
-                r2.push(column![container(row![text(reg.name.clone()+ " ").font(BOLD_FONT), text(reg.val)]).style(iced::theme::Container::Box).width(Length::Units(110)).max_width(110)].spacing(30).padding(10).into());
+                r2.push(column![container(row![text(reg.name.clone()+ " ").font(BOLD_FONT), text(reg.val)]).style(iced::theme::Container::Box).width(Length::Units(90)).max_width(90)].spacing(30).padding(10).into());
             }
             rnum+=1;
         }
         for reg in &regs[(regs.len()/2)..(3*regs.len()/4)] {
-            r3.push(column![container(row![text(reg.name.clone()+ " ").font(BOLD_FONT), text(reg.val)]).style(iced::theme::Container::Box).width(Length::Units(110)).max_width(110)].spacing(30).padding(10).into());
+            r3.push(column![container(row![text(reg.name.clone()+ " ").font(BOLD_FONT), text(reg.val)]).style(iced::theme::Container::Box).width(Length::Units(90)).max_width(90)].spacing(30).padding(10).into());
         }
         for reg in &regs[(3*regs.len()/4)..(regs.len())] {
-            r4.push(column![container(row![text(reg.name.clone()+ " ").font(BOLD_FONT), text(reg.val)]).style(iced::theme::Container::Box).width(Length::Units(110)).max_width(110)].spacing(30).padding(10).into());
+            r4.push(column![container(row![text(reg.name.clone()+ " ").font(BOLD_FONT), text(reg.val)]).style(iced::theme::Container::Box).width(Length::Units(90)).max_width(90)].spacing(30).padding(10).into());
         }
         column![Row::with_children(r1), Row::with_children(r2), 
         Row::with_children(r3), Row::with_children(r4)].spacing(20).padding(30).into()
