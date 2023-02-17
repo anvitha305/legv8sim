@@ -1,5 +1,7 @@
 # legv8sim - A LEG-V8 Simulator and Additional Tools for Debugging/Editing 
 
+Check the [legv8sim.tex](https://github.com/anvitha305/legv8sim/blob/master/legv8sim.tex) file as an overview of the system's goals.
+
 ## [Version 1.0 Sublime Highlighting](https://github.com/anvitha305/legv8sim/releases/tag/sublime)
 Not really a version of the simulator, but rather Sublime editor's highlighting syntax defined so that I can use a particular parsing library that got put into a package. Future verison(s) will include support for more code editors to have LEG-V8 syntax highlighting.
 
