@@ -11,7 +11,7 @@
 ;; This file is not part of GNU Emacs.
 
 ;;; License:
-;; You can redistribute and/or modify the code under the terms of the MIT license.
+;; You can redistribute and/or modify the code under the terms of the Apache 2.0 license.
 
 ;;; Commentary:
 
