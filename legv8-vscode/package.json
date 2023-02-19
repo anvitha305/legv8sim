@@ -1,0 +1,25 @@
+{
+  "name": "legv8-vscode",
+  "displayName": "legv8-vscode",
+  "description": "VSCode extension for LEG-V8 assembly development [code highlighting primarily]",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [{
+      "id": "legv8",
+      "aliases": ["LEG-V8", "legv8"],
+      "extensions": [".s",".legv8"],
+      "configuration": "./language-configuration.json"
+    }],
+    "grammars": [{
+      "language": "legv8",
+      "scopeName": "source.legv8",
+      "path": "./syntaxes/legv8.tmLanguage.json"
+    }]
+  }
+}
