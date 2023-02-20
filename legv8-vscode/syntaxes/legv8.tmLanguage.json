@@ -13,7 +13,7 @@
 		"keywords": {
 			"patterns": [{
 				"name": "keyword.control.legv8",
-				"match": "\\b(if|while|for|return)\\b"
+				"match": "\\b(add|adds|and|addi)\\b"
 			}]
 		},
 		"strings": {
