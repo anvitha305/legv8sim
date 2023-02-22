@@ -19,7 +19,6 @@ use iced::widget::text::Text;
 mod legv8;
 mod registers;
 use registers::registers as regs;
-use legv8::{brack};
 use crate::regs::registers;
 use crate::legv8::Instruction;
 use crate::legv8::Branch;
