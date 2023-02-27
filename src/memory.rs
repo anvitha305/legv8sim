@@ -6,6 +6,16 @@ pub struct Addr{
     pub address: u16,
     pub val: f32,
 }
+pub struct Stack {
+    pub stack: Vec<Addr>;
+    pub topaddr: u16;
+}
+
+pub trait Stackable{
+    pub fn push(&self, obj);
+    pub fn pop(&self)->Addr;
+    pub fn peek(&self)->Addr;
+}
 
 // module that renders the memory
 pub mod registers {

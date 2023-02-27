@@ -20,6 +20,7 @@ mod legv8;
 mod registers;
 use registers::registers as regs;
 use crate::regs::registers;
+use memory::Addr;
 use crate::legv8::Instruction;
 use crate::legv8::Branch;
 
@@ -87,7 +88,8 @@ fn highlight(code: &str, theme: String)-> (Vec<OtherStyle>, Vec<String>){
 struct Simulator<'a>{
    regs: Vec<registers::Reg>,
    instructions: Vec<Branch>,
-   main_mem: Vec<(u16, f32)>,
+   stack: Vec<memory::Addr>,
+   main_mem: Vec<memory::Addr>,
    fname: String,
    darkmode: bool,
    code: String,
