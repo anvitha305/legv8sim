@@ -7,14 +7,14 @@ pub struct Addr{
     pub val: f32,
 }
 pub struct Stack {
-    pub stack: Vec<Addr>;
-    pub topaddr: u16;
+    pub stack: Vec<Addr>,
+    pub topaddr: u16,
 }
 
 pub trait Stackable{
-    pub fn push(&self, obj);
-    pub fn pop(&self)->Addr;
-    pub fn peek(&self)->Addr;
+    fn push(&self, obj:Addr);
+    fn pop(&self)->Addr;
+    fn peek(&self)->Addr;
 }
 
 // module that renders the memory
@@ -26,7 +26,7 @@ pub mod registers {
     use iced::widget::{Row, container, column, row, text};
     use iced::{Element, Length, color, Color, Font};
     use iced_native::widget::{Container};
-
+/*
     // generates the register representation text from the vector containing all the registers
     // regs : the registers in legv8
     // returns : the rendering of the register representation.
@@ -36,4 +36,5 @@ pub mod registers {
             bytes: include_bytes!("resources/Lato-Black.ttf")};
         let mut address_view = Vec::<Element<Message>>::new();
     }
+    */
 }

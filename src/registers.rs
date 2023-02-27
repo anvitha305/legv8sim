@@ -8,7 +8,6 @@ pub struct Reg{
 
 // module that renders the registers 
 pub mod registers {
-    use super::*;
     use crate::registers::Reg;
     use crate::Message;
     use iced::Background;
