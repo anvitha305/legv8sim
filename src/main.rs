@@ -17,10 +17,11 @@ use syntect::util::{LinesWithEndings};
 use iced::widget::text::Text;
 // external modules used in creating structures for the simulator
 mod legv8;
+mod memory;
 mod registers;
 use registers::registers as regs;
 use crate::regs::registers;
-use memory::Addr;
+use memory::{Addr, Stack};
 use crate::legv8::Instruction;
 use crate::legv8::Branch;
 
