@@ -14,6 +14,12 @@ Vim syntax highlighting, to make legv8sim editor-agnostic in terms of developmen
 <img width="422" alt="image" src="https://user-images.githubusercontent.com/44482134/217743095-3406f13f-a8fa-4476-81d9-377056e51b88.png">
 [demo of version 1.1's syntax highlighting]
 
+## [Version 1.2 VSCode Highlighting](https://github.com/anvitha305/legv8sim/releases/tag/vs-code)
+VSCode syntax highlighting brings another editor that is supported with the syntax highlighting grammar designed in this project. To view the source for this part of the project, go to the legv8-vscode branch.
+<img width="766" alt="image" src="https://user-images.githubusercontent.com/44482134/221988979-73e1dfcc-d656-41fc-9cde-28c22dd8d7df.png">
+
+[demo of version 1.2's syntax highlighting]
+
 ## Libraries Used
 - [Iced](https://iced.rs/)
 - [Syntect](https://github.com/trishume/syntect)
