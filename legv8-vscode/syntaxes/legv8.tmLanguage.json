@@ -3,30 +3,137 @@
 	"name": "LEG-V8",
 	"patterns": [
 		{
-			"include": "#keywords"
+			"include": "#comments"
 		},
 		{
-			"include": "#strings"
+			"include": "#symbols"
+		},
+		{
+			"include": "#registers"
+		},
+		{
+			"include": "#constants"
+		},
+		{
+			"include": "#itype"
+		},
+		{
+			"include": "#imtype"
+		},
+		{
+			"include": "#rtype"
+		},
+		{
+			"include": "#dtype"
+		},
+		{
+			"include": "#cbtype"
+		},
+		{
+			"include": "#btype"
+		},
+		{
+			"include": "#branch"
 		}
 	],
 	"repository": {
-		"keywords": {
-			"patterns": [{
-				"name": "keyword.control.legv8",
-				"match": "\\b(add|adds|and|addi)\\b"
-			}]
+		"comments" : {
+		"patterns": [
+			{
+				"comment": "line comments",
+				"name": "comment.line.double-slash.legv8",
+				"match": "\\s*//.*"
+			}
+		 ]
 		},
-		"strings": {
-			"name": "string.quoted.double.legv8",
-			"begin": "\"",
-			"end": "\"",
+		"symbols" : {
 			"patterns": [
 				{
-					"name": "constant.character.escape.legv8",
-					"match": "\\\\."
+					"comment": "assembler symbols supported in legv8",
+					"name": "support.type.legv8",
+					"match": ".(type|glob(a)?l|data|word)"
 				}
+			 ]
+			},
+		"registers" : {
+			"patterns": [
+				{
+					"comment": "registers in legv8",
+					"name": "variable.language.legv8",
+					"match": "(?i)\\b(x([0-9]|[12][0-9]|[3][0-1]))\\b"
+				},
+				{
+					"comment": "alternate symbols for registers in legv8",
+					"name": "variable.language.legv8",
+					"match": "(?i)\\b(ip[0-1]|sp|fp|lr|xzr)\\b"
+				}
+			 ]
+			},
+		"constants" : {
+			"patterns": [
+				{
+					"comment": "constants in legv8",
+					"name": "constant.numeric.legv8",
+					"match": "\\#[0-9.]+"
+				}
+				]
+			},
+		"itype": {
+			"patterns": [{
+				"comment": "i-type",
+				"name": "keyword.control.legv8",
+				"match": "(?i)\\b((add|sub)i(s)?|andis|(and|orr|eor)i?|cmpi|ldi)\\b"
+			}]
+		},
+		"imtype": {
+			"patterns": [{
+				"comment": "im-type instructions in legv8 [complete set]",
+				"name": "keyword.control.legv8",
+				"match": "(?i)\\b(mov(k|z)?)\\b"
+			}]
+		},
+		"rtype": {
+			"patterns": [{
+				"comment": "r-type instructions in legv8 [complete set]",
+				"name": "keyword.control.legv8",
+				"match": "(?i)\\b(ands|(add|sub|mul|div)(s)?|(f(add|sub|mul|div|cmp))(s|d))|(and|orr|eor)|br|ls(l|r)|(s|u)(div|mulh)|(ldur|stur)(s|d)|cmp\\b"
+			}]
+		},
+		"dtype": {
+			"patterns": [{
+				"comment": "d-type instructions in legv8 [complete set]",
+				"name": "keyword.control.legv8",
+				"match": "(?i)\\b(ldur)(b|h|sw)?|(ld|st)(xr|a)|(stur)(b|h|w)?\\b"
+			}]
+		},
+		"cbtype": {
+			"patterns": [{
+				"comment": "cb-type instructions in legv8 [complete set]",
+				"name": "keyword.control.legv8",
+				"match": "(?i)\\b(cb(n)?z|b\\.(l(e|t|s|o)|g(e|t)|h(i|s)|v(c|s)|c(s|c)|eq|ne|hs|mi|pl|al))\\b"
+			}]
+		},
+		"btype": {
+			"patterns": [{
+				"comment": "b-type instructions in legv8 [complete set]",
+				"name": "keyword.control.legv8",
+				"match": "(?i)\\b(b(l)?)\\b"
+			}]
+		},
+		"branch": {
+			"patterns": [{
+				"comment": "branch labelling in legv8",
+				"name": "entity.name.function.legv8",
+				"match": "[A-Za-z_][A-Za-z_0-9]*(:|(\\(\\)))"
+			},
+			{
+				"comment": "branch labelling in legv8",
+				"name": "entity.name.function.legv8",
+				"match": "\\b[A-Za-z_][A-Za-z_0-9]*\\b"
+			}
 			]
 		}
+
 	},
 	"scopeName": "source.legv8"
 }
