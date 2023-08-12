@@ -1,0 +1,7 @@
+syntax "legv8" "\.(legv8|s)$"
+
+icolor cyan "ldxr|stxr|stur[sdbhw]|ls[lr]|ldur[sdbh]|stur|ldur|ldursw|a[nd]di?s?|subi?s?|mov[zk]?|cbn?z|(eo|or)ri?|b[lr]|b\.l[etso]|b\.g[et]|b\.h[is]|b\.[vc][cs]|b\.eq|b\.ne|b\.hs|b\.mi|b\.pl|b(\.al)?|mul|[us]mulh|[us]?div|cmpi?|fadd[sd]|fsub[sd]|fmul[sd]|fdiv[sd]|fcmp[sd]"
+icolor magenta "X[0-9]|X[12][0-9]|X[3][0-1]|ip[0-1]|sp|fp|lr|xzr"
+icolor green "\.(type|globa?l|data|word)"
+icolor yellow "#[0-9]+"
+icolor red "\/\/.*$"
