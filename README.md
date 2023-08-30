@@ -23,6 +23,7 @@ VSCode syntax highlighting brings another editor that is supported with the synt
 ## [Version 1.3 Nano Highlighting](https://github.com/anvitha305/legv8sim/releases/tag/nano)
 Nano now supported! To view source, go to the legv8-nano branch.
 ![image](https://github.com/anvitha305/legv8sim/assets/44482134/07fb5585-f5ac-45e3-8cf8-42c938e0b189)
+[demo of version 1.3's syntax highlighting]
 
 ## Libraries Used
 - [Iced](https://iced.rs/)
