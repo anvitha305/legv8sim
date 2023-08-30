@@ -18,9 +18,9 @@ Vim syntax highlighting, to make legv8sim editor-agnostic in terms of developmen
 VSCode syntax highlighting brings another editor that is supported with the syntax highlighting grammar designed in this project. To view the source for this part of the project, go to the legv8-vscode branch.
 <img width="755" alt="image" src="https://user-images.githubusercontent.com/44482134/221992519-c1748e6d-5b3b-4a74-8752-bb2cf95d8b55.png">
 
-[demo of version 1.3's syntax highlighting]
+[demo of version 1.2's syntax highlighting]
 
-## [Version 1.2 Nano Highlighting](https://github.com/anvitha305/legv8sim/releases/tag/nano)
+## [Version 1.3 Nano Highlighting](https://github.com/anvitha305/legv8sim/releases/tag/nano)
 Nano is the penultimate editor supported in this project. To view the source for this part of the project, go to the legv8-nano branch.
 ![image](https://github.com/anvitha305/legv8sim/assets/44482134/b632fb3c-b2e5-4461-bf40-fda96d10444a)
 
