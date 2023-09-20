@@ -2,7 +2,7 @@
 // [will add support for aliasing later ? x31 = xzr]
 #[derive(Clone)]
 pub struct Reg{
-    pub val: f32,
+    pub val: f64,
     pub name: String,
 }
 

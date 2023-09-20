@@ -89,7 +89,7 @@ use nom::{
       pub typ: Typ,
       pub instr: String,
     pub regs: Vec<String>,
-    pub addr: u16    
+    pub addr: u32    
   }
   
   pub struct Branch{

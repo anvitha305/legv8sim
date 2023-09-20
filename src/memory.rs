@@ -3,12 +3,12 @@
 // the main memory will be 4 bytes per address and size is configured by a dropdown.
 #[derive(Clone)]
 pub struct Addr{
-    pub address: u16,
-    pub val: f32,
+    pub address: u64,
+    pub val: f64
 }
 pub struct Stack {
     pub stack: Vec<Addr>,
-    pub topaddr: u16,
+    pub topaddr: u64,
 }
 
 pub trait Stackable{
