@@ -3,7 +3,8 @@
 
 const lightCodeTheme = require('prism-react-renderer/themes/github');
 const darkCodeTheme = require('prism-react-renderer/themes/dracula');
-
+const organizationName = "anvitha305";
+const projectName = "legv8sim"
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'legv8sim',
@@ -11,10 +12,10 @@ const config = {
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
-  url: 'https://anvitha305.github.io',
+  url: `https://${organizationName}.github.io`,
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/legv8sim',
+  baseUrl: `/${projectName}/`,
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
@@ -42,14 +43,14 @@ const config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/anvitha305/legv8sim',
+            'https://github.com/anvitha305/legv8sim/tree/main/',
         },
         blog: {
           showReadingTime: true,
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/anvitha305/legv8sim',
+            'https://github.com/anvitha305/legv8sim/tree/main/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
@@ -99,4 +100,12 @@ const config = {
     }),
 };
 
-module.exports = config;
+module.exports = {
+  // ...
+  url: 'https://anvitha305.github.io/legv8sim', // Your website URL
+  baseUrl: '/',
+  projectName: 'legv8sim',
+  organizationName: 'anvitha305',
+  trailingSlash: false,
+  // ...
+};
