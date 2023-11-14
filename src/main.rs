@@ -118,7 +118,7 @@ impl Sandbox for Simulator<'_>{
     fn new() -> Self {
         let mut a = Vec::new();
         for i in 0..32 {
-            a.push(registers::Reg{val: 0.0, name: format!("x{}", i)})
+            a.push(registers::Reg{val: 0, name: format!("x{}", i)})
         }
         Self { regs: a, main_mem:Vec::new(), stack:Vec::new(), instructions:Vec::new(), darkmode:true,
         fname:"".to_string(), code:"".to_string(), styles:(Vec::new(), Vec::new()), highlights: Vec::new()}
