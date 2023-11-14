@@ -1,8 +1,8 @@
 use nom::{
     IResult,
     multi::{many0, many1},
-    combinator::{map_res, verify, value, opt, recognize},
-    sequence::{preceded, pair, delimited, tuple, terminated},
+    combinator::{map_res, verify, value, recognize},
+    sequence::{preceded, pair, delimited, terminated},
     character::complete::{char, digit1, one_of},
     branch::{alt},
     bytes::complete::{tag, is_not},

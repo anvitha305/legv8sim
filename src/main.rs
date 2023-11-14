@@ -21,8 +21,8 @@ mod memory;
 mod registers;
 use registers::registers as regs;
 use crate::regs::registers;
-use memory::{Addr, Stack};
-use crate::legv8::Instruction;
+
+
 use crate::legv8::Branch;
 
 pub fn main() -> iced::Result {
@@ -34,7 +34,7 @@ struct WhiteFrame;
 impl container::StyleSheet for WhiteFrame {
     type Style = iced::theme::Theme;
 
-    fn appearance(&self, style: &Self::Style) -> container::Appearance {
+    fn appearance(&self, _style: &Self::Style) -> container::Appearance {
         container::Appearance {
             background: iced::Color::from_rgb(1.0, 1.0, 1.0).into(),
             ..Default::default()
@@ -183,7 +183,7 @@ impl Sandbox for Simulator<'_>{
         const BOLD_FONT: Font = Font::External { 
             name: "bold font",
             bytes: include_bytes!("resources/Lato-Black.ttf")};
-        let theme = Container::Custom(
+        let _theme = Container::Custom(
             Box::new(WhiteFrame) as Box<dyn container::StyleSheet<Style = iced::theme::Theme>>
         );
         // sets up the text highlighting from the content

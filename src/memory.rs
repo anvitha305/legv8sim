@@ -19,13 +19,13 @@ pub trait Stackable{
 
 // module that renders the memory
 pub mod registers {
-    use super::*;
-    use crate::registers::Reg;
-    use crate::Message;
-    use iced::Background;
-    use iced::widget::{Row, container, column, row, text};
-    use iced::{Element, Length, color, Color, Font};
-    use iced_native::widget::{Container};
+    
+    
+    
+    
+    
+    
+    
 /*
     // generates the register representation text from the vector containing all the registers
     // regs : the registers in legv8

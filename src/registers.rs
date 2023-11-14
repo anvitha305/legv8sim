@@ -10,10 +10,10 @@ pub struct Reg{
 pub mod registers {
     use crate::registers::Reg;
     use crate::Message;
-    use iced::Background;
+    
     use iced::widget::{Row, container, column, row, text};
-    use iced::{Element, Length, color, Color, Font};
-    use iced_native::widget::{Container};
+    use iced::{Element, Length, Font};
+    
 
     // generates the register representation text from the vector containing all the registers
     // regs : the registers in legv8
