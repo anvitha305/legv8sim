@@ -57,27 +57,27 @@ def interpretOne(instruction, regs="", flags=""):
                 addr = parsed['addr']
                 regs[rt] = mem[regs[rn] + addr]
             except Exception as e:
-                raise Exception("errror parsing load instruction - invalid or incorrect number of operands.")
+                raise Exception("error parsing load instruction - invalid or incorrect number of operands.")
         if parsed['instr'] == "stur":
             try:
                 rt, rn = parsed['regs']
                 addr = parsed['addr']
                 mem[regs[rn] + addr] = regs[rt]
             except Exception as e:
-                raise Exception("errror parsing load instruction - invalid or incorrect number of operands.")
+                raise Exception("error parsing load instruction - invalid or incorrect number of operands.")
         if parsed['instr'] == "lda":
             try:
                 rt, rn = parsed['regs']
                 addr = parsed['addr']
                 mem[regs[rn]+ addr] = regs[rt]
             except Exception as e:
-                raise Exception("errror parsing load instruction - invalid or incorrect number of operands.") 
+                raise Exception("error parsing load instruction - invalid or incorrect number of operands.") 
         if parsed['instr']=="mov":
             try:
                 rt, rn = parsed['regs']
                 regs[rt] = regs[rn]
             except Exception as e:
-                raise Exception("errror parsing load instruction - invalid or incorrect number of operands.") 
+                raise Exception("error parsing load instruction - invalid or incorrect number of operands.") 
     elif parsed['typ'] == 'c':
         if parsed['instr'] == "b.gt":
             if (flags['z']==0) and (flags['n']==flags['v']):
