@@ -4,6 +4,7 @@ from tkinter import scrolledtext
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.pyplot as plt
 from scrollframe import *
+import interpreter
 import ast
 global filename
 global darkMode
