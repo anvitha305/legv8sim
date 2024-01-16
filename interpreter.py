@@ -6,9 +6,8 @@ flags={"n":0, "c":0, "z":0, "v":0}
 mem = dict()
 pc = (None, 0)
 ret_instr = (None,0)
-def parse():
+def parse(fname):
     global pc
-    fname = open(input("What file do you want to open and run?: "), "r")
     program = []
     branchline = list(map(lambda x: x[:x.find("//")]+" " if x.find("//")!=-1 else x, fname.read().split("\n")))
     if len(branchline) == 0:
