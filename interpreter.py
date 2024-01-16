@@ -405,14 +405,10 @@ def interpretOne(instruction, regs="", flags=""):
     pc = next_instr
     return regs, flags
 
-def run():
-    parsed = parse()
-    while True:
-        try:
-            print(interpretOne(parsed[pc[0]][pc[1]], registers, flags))
-        except IndexError:
-            break
-
-
-if __name__ == "__main__":
-    run()
+#def run():
+ #   parsed = parse()
+  #  while True:
+   #     try:
+    #        print(interpretOne(parsed[pc[0]][pc[1]], registers, flags))
+     #   except IndexError:
+      #      break
