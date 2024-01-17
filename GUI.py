@@ -10,6 +10,7 @@ global filename
 global darkMode
 global stringvars
 global entries
+global parsed
 global tabl
 class AssemblySimApp(tk.Tk):
 	def __init__(self, *args, **kwargs):
@@ -30,7 +31,7 @@ class AssemblySimApp(tk.Tk):
 		self.button2.grid(row = 0, column = 2, padx=10, pady=10)
 		self.button3 = ttk.Button(text = "Open File", command = self.browseFiles) 
 		self.button3.grid(row=0, column=3,padx=10,pady=10)
-		self.button4 = ttk.Button(text="Step", command = self.updateMemory)
+		self.button4 = ttk.Button(text="Step", command = self.update)
 		self.button4.grid(row=0, column=4,padx=10,pady=10)
 		self.label2 = ttk.Label(text = "File to be simulated:", style="Cont.TLabel")
 		self.label2.grid(row=1, column=0, padx=10,pady=10, columnspan = 5, sticky = tk.W+tk.E)
@@ -80,6 +81,7 @@ class AssemblySimApp(tk.Tk):
 		darkMode = False
 	def browseFiles(self):
 		global darkMode
+		global parsed
 		filename = tk.filedialog.askopenfilename(initialdir = "-",title = "Select a legv8 (.s, .legv8) file to run",filetypes = (("Assembly","*.s"), ("LEGV8","*.legv8"),("All Files","*.*")))
 		try:
 			self.labelfile.destroy()
@@ -98,20 +100,33 @@ class AssemblySimApp(tk.Tk):
 			self.labelcont.configure(bg="white", fg="black")
 		self.labelcont.grid(row=2, column=0,columnspan=6, padx=10, pady=10)
 		self.labelcont.insert(tk.INSERT, txt)
+		my_list = [("x"+str(i), 0) for i in range(32) ]
+		tabl = [my_list[i * 4:(i + 1) * 4] for i in range((len(my_list) + 4 - 1) // 4 )] 
+		self.regis =Table(self.sf1.viewPort, tabl)
+		interpreter.registers = dict(zip(["x"+str(i) for i in range(0,32)],[0]*32))
+		interpreter.flags={"n":0, "c":0, "z":0, "v":0}
+		interpreter.mem = dict()
+		interpreter.pc = (None, 0)
+		interpreter.ret_instr = (None,0)
+		try:
+			parsed = interpreter.parse(filename)
+		except Exception as e:
+			print(e)
 		self.labelcont.configure(state="disabled")
 
 	#dummy code for updating memory
-	def updateMemory(self):
-		for row in range(100):
-			a = row
-			tk.Label(self.sf.viewPort, text="%s" % row, width=3, borderwidth="1", relief="solid").grid(row=row, column=0)
-			t="this is the second column for row %s" %row
-			tk.Button(self.sf.viewPort, text=t, command=lambda x=a: print("Hello " + str(x))).grid(row=row, column=1)
+	def update(self):
+		global parsed
+		interpreter.interpretOne(parsed[interpreter.pc[0]][interpreter.pc[1]], interpreter.registers, interpreter.flags)
+		print([i[1] for i in interpreter.registers.items()])
+		my_list = list(interpreter.registers.items())
+		tabl = [my_list[i * 4:(i + 1) * 4] for i in range((len(my_list) + 4 - 1) // 4 )] 
+		self.regis =Table(self.sf1.viewPort, tabl)
 
-def doSomething(event):
+def updateRegisters(event):
 	text = event.widget.get()
 	try:
-		print([ast.literal_eval(i.get()) for i in entries])
+		interpreter.registers = dict(zip(["x"+str(i) for i in range(0,32)],[ast.literal_eval(i.get()) for i in entries]))
 	except Exception as e:
 		print(e)
 class Table:
@@ -126,7 +141,7 @@ class Table:
 				self.lab = tk.Label(root, text = lst[i][j][0])
 				self.lab.grid(row=i, column = 2*j)
 				self.e = tk.Entry(root, width=20)
-				self.e.bind('<Key-Return>', doSomething)
+				self.e.bind('<Key-Return>', updateRegisters)
 				entries.append(self.e)
 				self.e.grid(row=i, column=2*j+1)
 				self.e.insert(tk.END, lst[i][j][1])

@@ -9,7 +9,9 @@ ret_instr = (None,0)
 def parse(fname):
     global pc
     program = []
-    branchline = list(map(lambda x: x[:x.find("//")]+" " if x.find("//")!=-1 else x, fname.read().split("\n")))
+    file = open(fname)
+    branchline = list(map(lambda x: x[:x.find("//")]+" " if x.find("//")!=-1 else x, file.read().split("\n")))
+    file.close()
     if len(branchline) == 0:
         return
     branches = dict()
