@@ -32,7 +32,7 @@ def parse(fname):
     for branch in branches:
         ir[branch] = []
         for line in branches[branch]:
-            funcs = [lsim.i_inst, lsim.r_inst, lsim.d_inst, lsim.cb_inst, lsim.b_inst]
+            funcs = [lsim.i_inst, lsim.r_inst, lsim.d_inst, lsim.b_inst, lsim.cb_inst]
             res=""
             for func in funcs:
                 try:

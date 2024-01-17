@@ -117,16 +117,18 @@ class AssemblySimApp(tk.Tk):
 	#dummy code for updating memory
 	def update(self):
 		global parsed
-		interpreter.interpretOne(parsed[interpreter.pc[0]][interpreter.pc[1]], interpreter.registers, interpreter.flags)
-		print([i[1] for i in interpreter.registers.items()])
-		my_list = list(interpreter.registers.items())
-		tabl = [my_list[i * 4:(i + 1) * 4] for i in range((len(my_list) + 4 - 1) // 4 )] 
-		self.regis =Table(self.sf1.viewPort, tabl)
-
+		try:
+			interpreter.interpretOne(parsed[interpreter.pc[0]][interpreter.pc[1]], interpreter.registers, interpreter.flags)
+			my_list = list(interpreter.registers.items())
+			tabl = [my_list[i * 4:(i + 1) * 4] for i in range((len(my_list) + 4 - 1) // 4 )] 
+			self.regis =Table(self.sf1.viewPort, tabl)
+		except IndexError:
+			pass
 def updateRegisters(event):
 	text = event.widget.get()
 	try:
 		interpreter.registers = dict(zip(["x"+str(i) for i in range(0,32)],[ast.literal_eval(i.get()) for i in entries]))
+		print(interpreter.registers)
 	except Exception as e:
 		print(e)
 class Table:
