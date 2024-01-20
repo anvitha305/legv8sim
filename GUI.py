@@ -26,6 +26,7 @@ class AssemblySimApp(tk.Tk):
 		self.style = ttk.Style(self.master)
 		self.style.configure("My.TLabel", font=('Arial', 20))
 		self.style.configure("Cont.TLabel", font=('Arial', 15))
+		self.style.configure("TEntry", font=('Arial', 15))
 		self.style.configure("TButton", font=('Arial, 15'))
 		self.label1 = ttk.Label(text="File View", style="My.TLabel")
 		self.label1.grid(row=0, column = 0, padx=10, pady=10)
@@ -65,7 +66,6 @@ class AssemblySimApp(tk.Tk):
 		global darkMode	
 		self.configure(bg='black')
 		self.style.configure("TLabel", background="black",foreground="white")
-		self.style.configure("TEntry", background="black",foreground="white")
 		self.style.configure("TFrame", background="black",foreground="white")
 		self.sf.viewPort.configure(bg='black')
 		self.sf1.viewPort.configure(bg='black')
@@ -79,8 +79,10 @@ class AssemblySimApp(tk.Tk):
 		global darkMode
 		self.configure(bg='white')
 		self.style.configure("TLabel", background="white", foreground="black")
-		self.style.configure("TEntry", background="white",foreground="black")
 		self.style.configure("TFrame", background="white",foreground="black")
+		self.sf.viewPort.configure(bg='white')
+		self.sf1.viewPort.configure(bg='white')
+		self.sf2.viewPort.configure(bg='white')
 		try:
 			self.labelcont.configure(bg="white",fg="black")
 		except Exception as e:
@@ -120,7 +122,7 @@ class AssemblySimApp(tk.Tk):
 			parsed = interpreter.parse(filename)
 		except Exception as e:
 			errors+= "Error parsing the filename " +filename + ".\n"+ str(e) + "\n"
-			self.labelError = ttk.Label(self.sf2.viewPort, text = errors)
+			self.labelError = ttk.Label(self.sf2.viewPort, text = errors, style="Cont.TLabel")
 			self.labelError.grid(row =0,column=0)
 		self.labelcont.configure(state="disabled")
 
@@ -135,11 +137,11 @@ class AssemblySimApp(tk.Tk):
 			self.regis =Table(self.sf1.viewPort, tabl)
 		except IndexError:
 			errors+= "Stepped through end of code\n"
-			self.labelError = ttk.Label(self.sf2.viewPort, text = errors)
+			self.labelError = ttk.Label(self.sf2.viewPort, text = errors, style="Cont.TLabel")
 			self.labelError.grid(row =0,column=0)
 		except NameError:
 			errors+= "Open a valid LEGV8 file before stepping through!\n"
-			self.labelError = ttk.Label(self.sf2.viewPort, text = errors)
+			self.labelError = ttk.Label(self.sf2.viewPort, text = errors, style="Cont.TLabel")
 			self.labelError.grid(row =0,column=0)
 def updateRegisters(event):
 	global app
@@ -160,9 +162,9 @@ class Table:
 		entries = []
 		for i in range(total_rows):
 			for j in range(total_columns):
-				self.lab = tk.Label(root, text = lst[i][j][0])
+				self.lab = ttk.Label(root, text = lst[i][j][0], style="Cont.TLabel")
 				self.lab.grid(row=i, column = 2*j)
-				self.e = tk.Entry(root, width=20)
+				self.e = ttk.Entry(root, width=20, style="TEntry")
 				self.e.bind('<Key-Return>', lambda ev: updateRegisters(ev))
 				entries.append(self.e)
 				self.e.grid(row=i, column=2*j+1)
