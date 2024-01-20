@@ -12,10 +12,14 @@ global stringvars
 global entries
 global parsed
 global tabl
+global errors
+global app
 class AssemblySimApp(tk.Tk):
 	def __init__(self, *args, **kwargs):
 		global darkMode
 		global tabl
+		global errors
+		errors = ""
 		tk.Tk.__init__(self, *args, **kwargs)
 		self.title = "legv8 assembly simulator"
 		self.geometry("1000x700+200+200")
@@ -63,6 +67,9 @@ class AssemblySimApp(tk.Tk):
 		self.style.configure("TLabel", background="black",foreground="white")
 		self.style.configure("TEntry", background="black",foreground="white")
 		self.style.configure("TFrame", background="black",foreground="white")
+		self.sf.viewPort.configure(bg='black')
+		self.sf1.viewPort.configure(bg='black')
+		self.sf2.viewPort.configure(bg='black')
 		try:
 			self.labelcont.configure(bg="black",fg="white")
 		except Exception as e:
@@ -82,6 +89,7 @@ class AssemblySimApp(tk.Tk):
 	def browseFiles(self):
 		global darkMode
 		global parsed
+		global errors
 		filename = tk.filedialog.askopenfilename(initialdir = "-",title = "Select a legv8 (.s, .legv8) file to run",filetypes = (("Assembly","*.s"), ("LEGV8","*.legv8"),("All Files","*.*")))
 		try:
 			self.labelfile.destroy()
@@ -111,26 +119,38 @@ class AssemblySimApp(tk.Tk):
 		try:
 			parsed = interpreter.parse(filename)
 		except Exception as e:
-			print(e)
+			errors+= "Error parsing the filename " +filename + ".\n"+ str(e) + "\n"
+			self.labelError = ttk.Label(self.sf2.viewPort, text = errors)
+			self.labelError.grid(row =0,column=0)
 		self.labelcont.configure(state="disabled")
 
 	#dummy code for updating memory
 	def update(self):
 		global parsed
+		global errors
 		try:
 			interpreter.interpretOne(parsed[interpreter.pc[0]][interpreter.pc[1]], interpreter.registers, interpreter.flags)
 			my_list = list(interpreter.registers.items())
 			tabl = [my_list[i * 4:(i + 1) * 4] for i in range((len(my_list) + 4 - 1) // 4 )] 
 			self.regis =Table(self.sf1.viewPort, tabl)
 		except IndexError:
-			pass
+			errors+= "Stepped through end of code\n"
+			self.labelError = ttk.Label(self.sf2.viewPort, text = errors)
+			self.labelError.grid(row =0,column=0)
+		except NameError:
+			errors+= "Open a valid LEGV8 file before stepping through!\n"
+			self.labelError = ttk.Label(self.sf2.viewPort, text = errors)
+			self.labelError.grid(row =0,column=0)
 def updateRegisters(event):
+	global app
 	text = event.widget.get()
+	global errors
 	try:
 		interpreter.registers = dict(zip(["x"+str(i) for i in range(0,32)],[ast.literal_eval(i.get()) for i in entries]))
-		print(interpreter.registers)
 	except Exception as e:
-		print(e)
+		errors += 'Invalid value for register! \n'
+		app.labelError = ttk.Label(app.sf2.viewPort, text = errors)
+		app.labelError.grid(row =0,column=0)
 class Table:
 	def __init__(self,root, lst):
 		global entries
@@ -143,7 +163,7 @@ class Table:
 				self.lab = tk.Label(root, text = lst[i][j][0])
 				self.lab.grid(row=i, column = 2*j)
 				self.e = tk.Entry(root, width=20)
-				self.e.bind('<Key-Return>', updateRegisters)
+				self.e.bind('<Key-Return>', lambda ev: updateRegisters(ev))
 				entries.append(self.e)
 				self.e.grid(row=i, column=2*j+1)
 				self.e.insert(tk.END, lst[i][j][1])
