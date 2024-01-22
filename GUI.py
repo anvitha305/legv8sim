@@ -182,7 +182,6 @@ class AssemblySimApp(tk.Tk):
 	def update(self):
 		global parsed
 		global errors
-		print(interpreter.pc)
 		try:
 			self.memor = Table(app.sf.viewPort, [[i] for i in interpreter.mem.items()], updateMemory)
 		except IndexError:
