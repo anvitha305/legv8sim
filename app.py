@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 from scrollframe import *
 import interpreter
 import ast
+import sys
 global filename
 global darkMode
 global parsed
@@ -13,6 +14,21 @@ global tabl
 global errors
 global blankSpace
 global app
+class Logger(object):
+    def __init__(self):
+        self.terminal = sys.stdout
+        self.log = open("logfile.log", "w+")
+   
+    def write(self, message):
+        self.terminal.write(message)
+        self.log.write(message)  
+
+    def flush(self):
+        # this flush method is needed for python 3 compatibility.
+        # this handles the flush command by doing nothing.
+        # you might want to specify some extra behavior here.
+        pass    
+
 class AssemblySimApp(tk.Tk):
 	def __init__(self, *args, **kwargs):
 		global darkMode
@@ -297,6 +313,7 @@ class Table:
 				self.entries.append(self.e)
 				self.e.grid(row=i, column=2*j+1)
 				self.e.insert(tk.END, lst[i][j][1])
+sys.stdout = Logger()
 app = AssemblySimApp()
-
 app.mainloop()
+sys.stdout.log.close()

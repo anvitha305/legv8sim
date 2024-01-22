@@ -16,3 +16,4 @@ pyvenv.cfg
 node_modules/
 .docusaurus/
 __pycache__/
+logfile.log
