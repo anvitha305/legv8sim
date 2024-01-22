@@ -1,0 +1,7 @@
+altgraph==0.17.4
+legv8parse==0.1.4
+packaging==23.2
+pefile==2023.2.7
+pyinstaller==6.3.0
+pyinstaller-hooks-contrib==2024.0
+pywin32-ctypes==0.2.2
