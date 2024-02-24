@@ -131,8 +131,8 @@ class AssemblySimApp(tk.Tk):
 		file = open(filename)
 		txt = file.read()
 		file.close()
-		self.labelfile = ttk.Label(text=filename, style="Cont.TLabel")
-		self.labelfile.grid(row=1, column=1, columnspan=7, padx=10, pady=10)
+		self.labelfile = ttk.Label(text=filename.split("/")[-1], style="Cont.TLabel")
+		self.labelfile.grid(row=1, column=1, pady=10)
 		self.labelcont = scrolledtext.ScrolledText(wrap = tk.WORD, height = 4, font = ("Arial", 15))
 		if darkMode:
 			self.labelcont.configure(bg="black",fg="white")
