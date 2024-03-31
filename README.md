@@ -1,7 +1,7 @@
 # legv8sim - A LEG-V8 Simulator and Additional Tools for Debugging/Editing 
 
 ## [The Simulator]
-# This is the legv8 assembly simulator for ECE 331 at UMass Amherst.
+### This is the legv8 assembly simulator for ECE 331 at UMass Amherst.
 
 ### Minimum Requirements
 Python 3 [the script installs the remaining requisite libraries] Do not use Homebrew to install Python3.
