@@ -1,6 +1,0 @@
-[registers]
-x0 = 0
-x1 = 1
-
-[memory]
-"4" = 5

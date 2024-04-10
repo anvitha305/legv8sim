@@ -169,9 +169,18 @@ class AssemblySimApp(tk.Tk):
 		try:
 			self.labelfile.destroy()
 			self.labelcont.destroy()
+			self.label5.destroy()
 		except Exception as e:
 			pass
-		file = open(filename)
+		try:
+			file = open(filename)
+			if not (filename.endswith(".s") or filename.endswith(".legv8")):				raise Exception()
+		except Exception as e:
+			errors+= "Open a valid LEGV8 file before stepping through!\n"
+			self.labelError = ttk.Label(self.sf2.viewPort, text = errors)
+			self.labelError.grid(row =0,column=0)
+			self.sf2.canvas.update_idletasks()
+			self.sf2.canvas.yview_moveto(1.0)
 		progFile = filename
 		logging.basicConfig(filename=progFile+".log",format='%(asctime)s %(message)s',filemode='a', level=logging.INFO)
 		logger = logging.getLogger()
@@ -196,13 +205,15 @@ class AssemblySimApp(tk.Tk):
 		interpreter.pc = (None, 0)
 		interpreter.ret_instr = (None,0)
 		interpreter.mem = dict()
-		
 		self.memor = Table(app.sf.viewPort, [[i] for i in interpreter.mem.items()], updateMemory)
 		self.memor.e1 = ttk.Entry(app.sf.viewPort, style="TEntry")
 		self.memor.e2 = ttk.Entry(app.sf.viewPort, style="TEntry")
 		self.memor.e2.bind('<Key-Return>', lambda ev: updateMemory(ev))
 		self.memor.e1.grid(row=len(interpreter.mem), column=0)
 		self.memor.e2.grid(row=len(interpreter.mem), column=1)
+		txt = "Place in code: branch " + str(interpreter.pc[0]) + ", instruction #: " + str((interpreter.pc[1]))
+		self.label5 = ttk.Label(text=txt, style="My.TLabel")
+		self.label5.grid(row=9, column = 0,padx=1,pady=1, columnspan = 6)
 		try:
 			parsed = interpreter.parse(filename)
 		except Exception as e:
@@ -219,6 +230,10 @@ class AssemblySimApp(tk.Tk):
 		global errors
 		global filename
 		global progFile
+		try:
+			self.label5.destroy()
+		except Exception as e:
+			pass
 		my_list = [("x"+str(i), 0) for i in range(32) ]
 		tabl = [my_list[i * 4:(i + 1) * 4] for i in range((len(my_list) + 4 - 1) // 4 )] 
 		self.regis =Table(self.sf1.viewPort, tabl, updateRegisters)
@@ -236,6 +251,10 @@ class AssemblySimApp(tk.Tk):
 		self.memor.e2.bind('<Key-Return>', lambda ev: updateMemory(ev))
 		self.memor.e1.grid(row=len(interpreter.mem), column=0)
 		self.memor.e2.grid(row=len(interpreter.mem), column=1)
+		txt = "Place in code: branch " + str(interpreter.pc[0]) + ", instruction #: " + str((interpreter.pc[1]))
+		self.label5 = ttk.Label(text=txt, style="My.TLabel")
+		self.label5.grid(row=9, column = 0,padx=1,pady=1, columnspan = 6)
+
 		try:
 			parsed = interpreter.parse(progFile)
 		except Exception as e:
@@ -252,12 +271,10 @@ class AssemblySimApp(tk.Tk):
 		global parsed
 		global errors
 		global logger
-		print(logger)
-		logger.info("PC " + str(interpreter.pc))
-		logger.info("Regs " + str(interpreter.registers))
-		logger.info("Flags "+ str(interpreter.flags))
-		logger.info("Mem " + str(interpreter.mem))
-
+		try:
+			self.label5.destroy()
+		except Exception:
+			pass
 		try:
 			self.memor = Table(app.sf.viewPort, [[i] for i in interpreter.mem.items()], updateMemory)
 		except IndexError:
@@ -270,6 +287,10 @@ class AssemblySimApp(tk.Tk):
 			for widget in app.sf.viewPort.winfo_children():
 				widget.destroy()
 			self.sf.grid(row=6, column=0,padx=1,pady=1, columnspan = 6)
+			for i in interpreter.mem.keys():
+				print(i)
+				if int(i)%4!=0:
+					raise ValueError
 			self.memor = Table(app.sf.viewPort, [[i] for i in interpreter.mem.items()], updateMemory)
 			self.memor.e1 = ttk.Entry(app.sf.viewPort, style="TEntry")
 			self.memor.e2 = ttk.Entry(app.sf.viewPort, style="TEntry")
@@ -279,6 +300,16 @@ class AssemblySimApp(tk.Tk):
 			txt = "Place in code: branch " + str(interpreter.pc[0]) + ", instruction #: " + str((interpreter.pc[1]))
 			self.label5 = ttk.Label(text=txt, style="My.TLabel")
 			self.label5.grid(row=9, column = 0,padx=1,pady=1, columnspan = 6)
+			logger.info("PC " + str(interpreter.pc))
+			logger.info("Regs " + str(interpreter.registers))
+			logger.info("Flags "+ str(interpreter.flags))
+			logger.info("Mem " + str(interpreter.mem))
+		except ValueError:
+			errors+= "Invalid memory access! Meant to be allocating multiples of 4 bytes in memory.\n"
+			self.labelError = ttk.Label(self.sf2.viewPort, text = errors)
+			self.labelError.grid(row =0,column=0)
+			self.sf2.canvas.update_idletasks()
+			self.sf2.canvas.yview_moveto(1.0)
 		except IndexError:
 			errors+= "Stepped through end of code\n"
 			self.labelError = ttk.Label(self.sf2.viewPort, text = errors)
@@ -287,6 +318,12 @@ class AssemblySimApp(tk.Tk):
 			self.sf2.canvas.yview_moveto(1.0)
 		except NameError:
 			errors+= "Open a valid LEGV8 file before stepping through!\n"
+			self.labelError = ttk.Label(self.sf2.viewPort, text = errors)
+			self.labelError.grid(row =0,column=0)
+			self.sf2.canvas.update_idletasks()
+			self.sf2.canvas.yview_moveto(1.0)
+		except Exception as e:
+			errors+= str(e)+"\n"
 			self.labelError = ttk.Label(self.sf2.viewPort, text = errors)
 			self.labelError.grid(row =0,column=0)
 			self.sf2.canvas.update_idletasks()
@@ -318,6 +355,9 @@ def updateMemory(ev):
 	if app.memor.e1.get() != "" and app.memor.e2.get() !="":
 		try:
 			interpreter.mem[int(app.memor.e1.get())] = ast.literal_eval(app.memor.e2.get())
+			for i in interpreter.mem.keys():
+				if int(i)%4!=0 or i < 0:
+					raise ValueError
 			for widget in app.sf.viewPort.winfo_children():
 				widget.destroy()
 			app.sf.grid(row=6, column=0,padx=1,pady=1, columnspan = 6)

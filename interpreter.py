@@ -16,12 +16,23 @@ def parse(fname):
         return
     branches = dict()
     branchlocs = [i for i,e in enumerate(branchline) if ':' in e]
+    print(branchlocs)
     ir = dict()
     for i in range(len(branchlocs)):
-        try:
-            branches[branchline[branchlocs[i]].replace(":", "")] = branchline[branchlocs[i]+2:branchlocs[i+1]]
-        except IndexError:
-            branches[branchline[branchlocs[i]].replace(":", "")] = branchline[branchlocs[i]:]
+        if i == 0:
+            try:
+                 branches[branchline[branchlocs[i]].replace(":", "")] = branchline[branchlocs[i]+1:branchlocs[i+1]]
+            except IndexError:
+                 try:
+                      branches[branchline[branchlocs[i]].replace(":", "")] = branchline[branchlocs[i]+2:branchlocs[i+1]]
+                 except IndexError:
+                      branches[branchline[branchlocs[i]].replace(":", "")] = branchline[branchlocs[i]:]
+
+        else:
+            try:
+                 branches[branchline[branchlocs[i]].replace(":", "")] = branchline[branchlocs[i]+2:branchlocs[i+1]]
+            except IndexError:
+                 branches[branchline[branchlocs[i]].replace(":", "")] = branchline[branchlocs[i]:]
     if len(branchlocs)>0:
         branches[branchline[branchlocs[-1]].replace(":", "")] = branchline[branchlocs[-1]+1:]
     if len(branchlocs) ==0:
