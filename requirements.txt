@@ -17,3 +17,5 @@ pywin32-ctypes==0.2.2
 PyYAML==6.0.1
 six==1.16.0
 toml==0.10.2
+tk==8.6.14
+
