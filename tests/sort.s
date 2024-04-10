@@ -1,6 +1,6 @@
 // sorts an array, Patterson and Hennessy ARM edition ch 2
 sort:
-SUBI SP,SP,#40 // make room on stack for 5 registers
+SUBI SP,SP,#42 // make room on stack for 5 registers
 STUR X30,[SP,#32] // save LR on stack
 STUR X22,[SP,#24] // save X22 on stack
 STUR X21,[SP,#16] // save X21 on stack
@@ -11,7 +11,7 @@ MOV X22, X1 // copy parameter X1 into X22
 MOV X19, XZR // i = 0
 for1tst:
 CMP X19, X1 // compare X19 to X1 (i to n)
-B.GE exit1 // go to exit1 if X19 >= X1 (i>=n)
+B.GE exit1 // go to exit1 if X19 <= X1 (i<=n)
 SUBI X20, X19, #1 // j = i – 1
 for2tst:
 CMP X20,XZR // compare X20 to 0 (j to 0)
@@ -25,7 +25,7 @@ B.LE exit2 // go to exit2 if X12 <= X13
 MOV X0, X21 // first swap parameter is v
 MOV X1, X20 // second swap parameter is j
 BL swap
-SUBI X20, X20, #1 // j –= 1
+SUBI X20, X20, #1 // j = j minus 1
 B for2tst // branch to test of inner loop
 exit2:
 ADDI X19, X19, #1 // i += 1
